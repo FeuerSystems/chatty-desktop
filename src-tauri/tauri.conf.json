@@ -1,0 +1,74 @@
+{
+  "package": {
+    "productName": "Chatty",
+    "version": "0.0.18"
+  },
+  "build": {
+    "distDir": "../dist",
+    "devPath": "Set automatically by Vue CLI plugin",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": ""
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "org.chatty.desktop",
+      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+      "resources": [],
+      "externalBin": [],
+      "copyright": "MIT",
+      "category": "DeveloperTool",
+      "shortDescription": "A simple chat app for your friends",
+      "longDescription": "Chatty, a chat app with your privacy in mind, its open-source, forever.",
+      "deb": {
+        "depends": [],
+        "useBootstrapper": false
+      },
+      "macOS": {
+        "frameworks": [],
+        "minimumSystemVersion": "",
+        "useBootstrapper": false,
+        "exceptionDomain": "",
+        "signingIdentity": null,
+        "entitlements": null
+      },
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "updater": {
+      "active": false
+    },
+    "allowlist": {
+      "all": true
+    },
+    "windows": [
+      {
+        "width": 940,
+        "height": 500,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen",
+        "resizable": false
+      },
+      {
+        "title": "Chatty ",
+        "label": "main",
+        "width": 800,
+        "height": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "minWidth": 940,
+        "minHeight": 500,
+        "visible": false
+      }
+     
+    ],
+    "security": {
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
+    }
+  }
+}
