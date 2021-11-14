@@ -2,7 +2,7 @@
   <transition name="fade">
     <div class="app-login">
       <div class="login-container c fc">
-        <h2 id="login" class="pc">Please, log in below</h2>
+        <h2 id="login" class="pc">Please, {{ signup ? "sign up" : "log in" }} below</h2>
         <div class="form-container-modal">
           <div class="modal-form">
             <!-- <h2 class="header-modal-type">{{ type }} Below</h2> -->
@@ -23,19 +23,44 @@
                   <p class="formlbl">Password: <br /></p>
                   <input
                     type="password"
-                    placeholder="p455w0rd"
+                    placeholder="Password"
                     class="forminput"
                     id="app-pass"
                     @keypress="login"
                     v-model="password"
                   />
                 </div>
+                <div class="modal-name" v-if="signup">
+                  <p class="formlbl">Name: <br /></p>
+                  <input type="text" placeholder="Name" class="forminput name" id="app-name"
+                  v-model="name" />
+                </div>
               </div>
             </div>
+
+            <BaseButton
+              text="Switch To Sign Up"
+              type="danger"
+              :icon="require('../assets/svg/icons/leftarrow.svg')"
+              v-on:clicked="switchTypes"
+              v-if="!signup"
+            />
+            <BaseButton
+              text="Switch To Sign In"
+              type="primary"
+              :icon="require('../assets/svg/icons/rightarrow.svg')"
+              v-on:clicked="switchTypes"
+              v-if="signup"
+            />
             <div class="modal-actions" style="height: 32px" />
           </div>
         </div>
-        <BaseButton text="Log In" :icon="icon" type="confirm" v-on:clicked="login" />
+        <BaseButton
+          :text="signup ? 'Sign Up' : 'Log In'"
+          :icon="icon"
+          type="confirm"
+          v-on:clicked="login"
+        />
       </div>
     </div>
   </transition>
@@ -61,6 +86,9 @@ function setValid(element) {
 async function sendLogin(data) {
   return await userMod.login(data.email, data.password);
 }
+async function createUser(data) {
+  return await userMod.create(data.email, data.password, data.username);
+}
 export default {
   name: "login",
   mounted() {
@@ -80,31 +108,50 @@ export default {
       if (this.password.length < 1) return setInvalid(document.getElementById("app-pass"));
       if (this.password.length > 4) {
         setValid(document.getElementById("app-pass"));
-        this.log('Log In (Comp)', `Sending login req {email: "${this.email}", password: "${this.password} (sha512 encrypt, salt code 512)" }`);
+        this.log(
+          "Log In (Comp)",
+          `Sending login req {email: "${this.email}", password: "${this.password} (sha512 encrypt, salt code 512)" }`
+        );
         this.icon = require("../assets/svg/icons/buttonload.svg");
-        let res = await sendLogin({ email: this.email, password: this.password });
-        if (res.ok) {
-          this.icon = require("../assets/svg/icons/check.svg");
-          // Lets delay the page merge a bit, and let the user enjoy the change of the login icon
-          setTimeout(async () => {
-            this.Chatty.AuthManager.saveLogin(JSON.stringify(res.json), false);
-            this.$router.push("app");
-          }, 20);
+        let req;
+        if (this.signup) {
+          let res = await createUser({ email: this.email, password: this.password, username: this.name });
+          req = res;
+          if (res.ok) {
+            this.icon = require("../assets/svg/icons/check.svg");
+            // Lets delay the page merge a bit, and let the user enjoy the change of the login icon
+            setTimeout(async () => {
+              this.Chatty.AuthManager.saveLogin(JSON.stringify(res.json), false);
+              this.$router.push("app");
+            }, 20);
+          }
+        } else {
+          let res = await sendLogin({ email: this.email, password: this.password });
+          req = res;
+          if (res.ok) {
+            this.icon = require("../assets/svg/icons/check.svg");
+            // Lets delay the page merge a bit, and let the user enjoy the change of the login icon
+            setTimeout(async () => {
+              this.Chatty.AuthManager.saveLogin(JSON.stringify(res.json), false);
+              this.$router.push("app");
+            }, 20);
+          }
         }
-        if (!res.ok) {
+        if (!req.ok) {
           await this.$swal.fire({
             icon: "error",
-            title: "Something went wrong when trying to sign in",
+            title: `Something went wrong when trying to ${this.signup ? "Sign Up" : "Log In"}`,
             confirmButtonText: ":C",
             confirmButtonColor: "var(--danger)",
-            html: `<p style="color: var(--danger)">${res.json.reason}<br></p>`,
+            html: `<p style="color: var(--danger)">${req.json.reason}<br></p>`,
           });
           this.icon = require("../assets/svg/icons/login.svg");
-        } else {
         }
-
         return;
       }
+    },
+    switchTypes() {
+      this.signup = !this.signup;
     },
   },
   data() {
@@ -112,6 +159,8 @@ export default {
       email: "",
       password: "",
       icon: require("../assets/svg/icons/login.svg"),
+      signup: false,
+      name: ""
     };
   },
 };
@@ -191,7 +240,7 @@ export default {
 }
 html,
 body {
-    font-family: var(--webf);
-    background-image: url(../assets/svg/bg.svg);
+  font-family: var(--webf);
+  background-image: url(../assets/svg/bg.svg);
 }
 </style>

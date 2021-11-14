@@ -134,16 +134,38 @@ export class User {
     });
   }
 
-  async getFriends(user) {
-    const friends = [];
-    console.log(friends);
-    await user.friends.forEach(async (element) => {
-      friends.push(await this.getUser('id', element, false));
-    });
-    console.log(friends);
-    return friends;
+  async getFriends(auth) {
+   return await this.client.restFetch(`${this.endpoint}/@me/relationships`, 'user/relationships', {
+     method: 'GET',
+     headers: {
+      Authorization: auth,
+    },
+   })
   }
-
+  async addFriend(auth, id) {
+    return await this.client.restFetch(`${this.endpoint}/@me/relationships/${id}`, 'user/relationships/add', {
+      method: 'PUT',
+      headers: {
+        Authorization: auth
+      }
+    })
+  }
+  async denyFriend(auth, id) {
+    return await this.client.restFetch(`${this.endpoint}/@me/relationships/pending/${id}/deny`, 'user/relationships/pending/deny', {
+      method: 'DELETE',
+      headers: {
+        Authorization: auth
+      }
+    })
+  }
+  async acceptFriend(auth, id) {
+    return await this.client.restFetch(`${this.endpoint}/@me/relationships/pending/${id}/accept`, 'user/relationships/pending/accept', {
+      method: 'POST',
+      headers: {
+        Authorization: auth
+      }
+    })
+  }
   async update(auth, typeChange, valueChange, obj) {
     if (!obj) {
       return await this.client.restFetch(`${this.endpoint}/user/@me`, 'user', {

@@ -1,29 +1,31 @@
 <template>
   <div
     class="serverbutton fc"
-    :class="{ 'serverbutton-isHome': isHome, 'serverbutton-hasNotification': hasNotification }"
+    :class="{ 'serverbutton-isHome': isHome, 'serverbutton-hasNotification': server.notification }"
   >
     <!-- <div class="server-pill item-pill" :id="`server-pill-${server.id}`" /> -->
     <img
       :src="require('../../../../assets/svg/chatty.svg')"
-      v-if="isHome && !friendButton"
+      v-if="isHome && !server.friendButton"
       class="home-btn box"
     />
     <img
-      v-else-if="!isHome && !friendButton"
-      :src="server.avatar"
-      :class="pending ? 'server-icon pend' : 'server-icon server-icon-ac'"
-      @mouseover="!pending ? setPill : ''"
-      @mouseleave="!pending ? voidPill : ''"
+      v-else-if="!isHome && !server.friendButton"
+      :src="
+        server.avatar == null ? require(`../../../../assets/svg/icons/missing.svg`) : server.avatar
+      "
+      :class="server.pending ? 'server-icon pend' : 'server-icon server-icon-ac'"
+      @mouseover="!server.pending ? setPill : ''"
+      @mouseleave="!server.pending ? voidPill : ''"
       :s-id="server.id"
       @click="setActive"
       v-tooltip.right-start="server.info"
       :id="`server-item-false`"
-      :pending="pending"
+      :pending="server.pending"
     />
     <div
       class="pending fc"
-      v-if="pending"
+      v-if="server.pending"
       v-tooltip.right-start="`Pending friendship with <b class='pc b'>${server.name}</b>`"
       :id="`pending-${server.id}`"
     >
@@ -35,12 +37,13 @@
       />
     </div>
     <img
-      v-else-if="friendButton"
+      v-else-if="server.friendButton"
       :src="require('../../../../assets/svg/icons/addFriend.svg')"
       class="friend-btn"
       v-tooltip.right-start="'Add a new friend!'"
+      @click="addFriend"
     />
-    <div class="mentions" v-if="mentions">{{ mentions }}</div>
+    <div class="mentions" v-if="server.mentions">{{ server.mentions }}</div>
     <transition name="slide">
       <div
         class="options"
@@ -55,8 +58,16 @@
           y: 0,
         }"
       >
-        <img :src="require('../../../../assets/svg/icons/close.svg')" v-tooltip.right-start="`<b class='dc b'>Deny</b>`"/>
-        <img :src="require('../../../../assets/svg/icons/check.svg')" v-tooltip.right-start="`<b class='cc b'>Accept</b>`"/>
+        <img
+          :src="require('../../../../assets/svg/icons/close.svg')"
+          v-tooltip.right-start="`<b class='dc b'>Deny</b> ${server.name}`"
+          @click="denyFriend(server)"
+        />
+        <img
+          :src="require('../../../../assets/svg/icons/check.svg')"
+          v-tooltip.right-start="`<b class='cc b'>Accept</b> ${server.name}`"
+          @click="acceptFriend(server)"
+        />
       </div>
     </transition>
   </div>
@@ -67,11 +78,15 @@ export default {
   props: {
     selected: Boolean,
     isHome: Boolean,
-    notification: Boolean,
-    mentions: Number,
+    // notification: Boolean,
+    // mentions: Number,
     server: Object,
     friendButton: Boolean,
-    pending: Boolean,
+    // pending: Boolean,
+  },
+  mounted() {
+    this.requireModules("rest");
+    console.log(this.server);
   },
   data() {
     return {
@@ -79,6 +94,45 @@ export default {
     };
   },
   methods: {
+    async denyFriend(friend) {
+      let req = await this.Chatty.Rest.getModule("user").denyFriend(
+        JSON.parse(await this.Chatty.AuthManager.grabLogin()).auth,
+        friend.id
+      );
+      if (req.ok) {
+        this.$store.dispatch("removeFriend", this.$store.state.friends.indexOf(friend));
+      } else {
+        this.$swal.fire({
+          icon: "error",
+          title: "Something went wrong when trying to deny that friend request",
+          html: req.json.reason,
+        });
+      }
+    },
+    async acceptFriend(friend) {
+      let req = await this.Chatty.Rest.getModule("user").acceptFriend(
+        JSON.parse(await this.Chatty.AuthManager.grabLogin()).auth,
+        friend.id
+      );
+      if (req.ok) {
+        console.log(this.$store.state.friends.indexOf(friend));
+        this.showOptions = false;
+        this.$store.dispatch("removeFriend", this.$store.state.friends.indexOf(friend));
+        this.$store.dispatch("addFriend", {
+          id: req.json.id,
+          info: req.json.name,
+          name: req.json.name,
+          avatar: req.json.avatar,
+          p: false,
+        });
+      } else {
+        this.$swal.fire({
+          icon: "error",
+          title: "Something went wrong when trying to accept that friend request",
+          html: req.json.reason,
+        });
+      }
+    },
     setPill(e) {
       //   let element = e.srcElement;
       //   console.log(element);
@@ -97,7 +151,8 @@ export default {
       let alreadyActive = document.querySelector(`#server-item-true`);
       console.log(element.getAttribute("pending"));
       if (element.getAttribute("pending") == "true") {
-        element.style.border = (element.style.border == "var(--warning) solid 2px") ? 'none' : 'var(--warning) solid 2px';
+        element.style.border =
+          element.style.border == "var(--warning) solid 2px" ? "none" : "var(--warning) solid 2px";
         this.showOptions = this.showOptions = !this.showOptions;
         return;
       }
@@ -111,8 +166,46 @@ export default {
       element.id = "server-item-true";
       element.setAttribute("active", true);
     },
-    test(data) {
-      console.log(data);
+    async addFriend() {
+      const { value: friendID } = await this.$swal.fire({
+        title: "Add a friend",
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        html: "Ask your friend to copy their ID then paste it below!",
+        input: "text",
+        inputLabel: "Friend ID",
+        closeOnCancel: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "You need to input a valid ID";
+          }
+        },
+        preConfirm: async (friendID) => {
+          let req = await this.Chatty.Rest.getModule("user").addFriend(
+            JSON.parse(await this.Chatty.AuthManager.grabLogin()).auth,
+            friendID
+          );
+          if (!req.ok) {
+            if (req.status == 408) {
+              return this.$swal.showValidationMessage(
+                `<div class="fc f ta">User couldn't be friended: <b class="dc"> ${req.err} (${req.status})</b></div>`
+              );
+            }
+            return this.$swal.showValidationMessage(
+              `<div class="fc f ta">User couldn't be friended: <b class="dc"> ${req.json.reason} (${req.status})</b></div>`
+            );
+          }
+        },
+      });
+      if (friendID != undefined || friendID != null) {
+        await this.$swal.fire({
+          icon: "success",
+          title: "Succesfully added!",
+          html: "Friendship is pending, they'll have to friend you back",
+          confirmButtonText: "YAY",
+          confirmButtonColor: "var(--confirm)",
+        });
+      }
     },
   },
 };

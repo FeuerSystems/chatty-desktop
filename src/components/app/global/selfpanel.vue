@@ -2,7 +2,7 @@
   <div class="user-card-gl" :id="'uc-' + id">
     <div class="user-card-container">
       <div class="user-card-inner">
-        <img class="user-card-img" :src="avatar" :id="'img-' + id" />
+        <img class="user-card-img" :src="avatar" :id="'img-' + id" @click="openFileSave(0)" />
         <div class="user-card-contents">
           <span class="user-card-name">{{ name }}</span>
 
@@ -12,8 +12,11 @@
           </div>
         </div>
         <div class="user-card-options">
-
-             <img :src="require('../../../assets/svg/icons/settings.svg')" :id="'user-settings-' + id" class="user-settings ca" >
+          <img
+            :src="require('../../../assets/svg/icons/settings.svg')"
+            :id="'user-settings-' + id"
+            class="user-settings ca"
+          />
         </div>
       </div>
     </div>
@@ -21,6 +24,7 @@
 </template>
 
 <script>
+import { open } from "@tauri-apps/api/dialog";
 export default {
   name: "usercard",
   props: {
@@ -32,15 +36,34 @@ export default {
       img: String,
     },
   },
+  methods: {
+    openFileSave(type) {
+      switch (type) {
+        case 0: {
+          open({
+            filters: [
+                  {
+                    name: "Images",
+                    extensions:  ["jpg", "jpeg", "png", "gif"],
+                  },
+                ]
+          });
+          break;
+        }
+        case 1: {
+          open();
+          break;
+        }
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .user-card-container {
   color: var(--nqw);
-  width: 240px;
   height: 54px;
-  
 }
 .user-card-inner {
   background: rgb(27, 27, 27);
@@ -54,6 +77,7 @@ export default {
   border-radius: 50%;
   vertical-align: middle;
   margin-top: 3px;
+  transition: all 250ms ease;
 }
 .user-card-status {
   display: flex;
@@ -71,17 +95,23 @@ export default {
   width: 22px;
   border-radius: 50%;
   margin-top: 1px;
+  transition: all 250ms ease;
+}
+.user-status-img:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.user-card-img:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }
 .user-status-txt {
   text-align: center;
   margin-left: 5px;
-  opacity: .8;
+  opacity: 0.8;
   font-family: var(--webf);
 }
 .user-card-options {
   display: flex;
-  margin-left: 72px;
-  
 }
-
 </style>

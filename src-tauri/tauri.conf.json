@@ -47,25 +47,16 @@
     },
     "windows": [
       {
-        "width": 940,
-        "height": 500,
-        "decorations": false,
-        "url": "splashscreen.html",
-        "label": "splashscreen",
-        "resizable": false
-      },
-      {
-        "title": "Chatty ",
+        "title": "Chatty",
         "label": "main",
-        "width": 800,
-        "height": 600,
+        "width": 1220,
+        "height": 700,
         "resizable": true,
         "fullscreen": false,
-        "minWidth": 940,
-        "minHeight": 500,
-        "visible": false
+        "minWidth": 1120,
+        "minHeight": 700,
+        "visible": true
       }
-     
     ],
     "security": {
       "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"

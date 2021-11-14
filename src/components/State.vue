@@ -30,7 +30,12 @@ export default {
       let info = JSON.parse(await authManager.grabLogin());
       if (info) {
         this.prevLogIn = true;
-        this.$router.push("app");
+        this.$router.push({
+          name: "app",
+          params: {
+            auth: info,
+          },
+        });
       }
       if (!info) {
         this.prevLogIn = false;
@@ -84,5 +89,4 @@ export default {
   margin-right: auto;
   width: 50%;
 }
-
 </style>

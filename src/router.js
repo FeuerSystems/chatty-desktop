@@ -22,6 +22,7 @@ export default new Router({
     {
       path: '/app',
       name: 'app',
+      props: true,
       component: () => import('./views/App')
     }
   ]

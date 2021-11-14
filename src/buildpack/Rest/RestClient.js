@@ -19,14 +19,15 @@ export default class RestClient {
   }
 
   async restFetch(url, type, data) {
-    return timeoutResponse(5000, fetch(url, data)).then(async (res) => {
+    return timeoutResponse(this.timeout, fetch(url, data)).then(async (res) => {
       if (res === typeof Error) {
         console.warn(`[REST] - Request ${url} FAILED.`, res);
         return {
           ok: false,
         };
       } if (!res.ok) {
-        const json = await res.json();
+        const text = await res.text();
+        const json = (text.length == 0) ? null :  await JSON.parse(text);
         console.warn(`[REST] - Request ${url} NON_OK EXCEPTION.`, res.status);
         return {
           ok: false,
@@ -34,8 +35,8 @@ export default class RestClient {
           status: res.status,
         };
       }
-
-      const json = await res.json();
+      const text = await res.text();
+      const json = (text.length == 0) ? null :  await JSON.parse(text);
       this.cacheManager.addItem(new CacheItem(url, json, Date.now(), type, makeid(10)));
       return {
         ok: true,
@@ -44,6 +45,12 @@ export default class RestClient {
       };
     }).catch((err) => {
       console.warn(`[REST] - Request ${url} FAILED.`, err);
+      return {
+        ok: false,
+        json: null,
+        status: 408,
+        err: err
+      }
     });
   }
 

@@ -57,6 +57,7 @@ export default {
   top: 0;
   left: 0;
   right: 0;
+  z-index: 9;
 }
 .titlebar-button {
   display: inline-flex;
@@ -85,6 +86,7 @@ export default {
   font-family: Arial;
   z-index: 2;
   font-smooth: always;
+  z-index: 10;
 }
 
 #titlebar-close:hover {

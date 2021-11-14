@@ -10,6 +10,7 @@ import '@sweetalert2/theme-dark/dark.css';
 import { MotionPlugin } from '@vueuse/motion'
 import router from './router';
 import  VTooltip  from 'v-tooltip';
+import store from './store'
 // Set Decorations to false, we have our own icons :)
 appWindow.setDecorations(false);
 // Disable production tip
@@ -24,6 +25,8 @@ Vue.use(VTooltip);
 new Vue({
   render: (h) => h(App),
   router,
+  store,
+
   created() {
     let core = new ChattyCore({
       allowExperiments: true,

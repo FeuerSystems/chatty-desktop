@@ -1,16 +1,69 @@
 <template>
   <div id="app-container">
-      <ServerList id="server-list"/>
-      <selfpanel :status="{ text: 'haha', img: 'https://chatty-api.feuer.tech/609593521631408188230/370959481632061758269.jpg' }" name="Brys" avatar="https://chatty-api.feuer.tech/609593521631408188230/370959481632061758269.jpg" id="-1" class="selfuser" />
+    <ServerList id="server-list" />
+    <selfpanel
+      :status="{
+        text: selfData.status.text,
+        img: selfData.status.img,
+      }"
+      :name="selfData.name"
+      :avatar="selfData.avatar"
+      :id="selfData.id"
+      class="selfuser"
+    />
   </div>
 </template>
 
 <script>
-import selfpanel from '../components/app/global/selfpanel';
-import ServerList from '../components/app/global/ServerList';
+import selfpanel from "../components/app/global/selfpanel";
+import ServerList from "../components/app/global/ServerList";
 export default {
-    name: 'app',
-    components: {ServerList, selfpanel}
+  name: "app",
+  components: { ServerList, selfpanel },
+  props: {
+    auth: Object,
+  },
+  computed: {
+    selfData() {
+      return this.$store.state.self;
+    },
+  },
+  async mounted() {
+    this.log(this.auth);
+    if (!this.auth) {
+      location.href = "/";
+    }
+    this.$store.dispatch("setSelf", this.auth);
+    this.requireModules("rest");
+    let Rest = this.Chatty.Rest.getModule("user");
+    let selfCurrent = await Rest.getMe(this.auth.auth);
+    console.log(selfCurrent)
+    if (selfCurrent.ok) { this.$store.dispatch("setSelf", selfCurrent.json); }
+    else if (!selfCurrent.ok) {
+      this.$store.dispatch("setSelf", {
+        name: "Failed",
+        avatar: require("../assets/svg/icons/missing.svg"),
+        auth: this.auth.auth,
+        status: {
+          text: `(${selfCurrent.status})`,
+        },
+      });
+    }
+    let friends = await Rest.getFriends(this.auth.auth);
+    if (!friends.ok) {
+      this.$store.dispatch("addFriend", {
+        name: "Friends failed to load!",
+        id: 0,
+        info: `Response of ${friends.status} was given (${friends.err})`,
+        avatar: require("../assets/svg/icons/close.svg"),
+        pending: false,
+      });
+      this.$store.dispatch("removeFriend", 0);
+      return;
+    }
+    this.$store.dispatch("setFriends", friends.json);
+    this.$store.dispatch("removeFriend", 0);
+  },
 };
 </script>
 
@@ -46,14 +99,13 @@ export default {
   margin-top: 30px;
   margin-right: 10px;
   background-color: #242424;
-
 }
- #server-list::-webkit-scrollbar {
-	 display: none;
+#server-list::-webkit-scrollbar {
+  display: none;
 }
 html,
 body {
-    font-family: var(--webf);
-    background-image: url(../assets/svg/bg.svg);
+  font-family: var(--webf);
+  background-image: url(../assets/svg/bg.svg);
 }
 </style>
