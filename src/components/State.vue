@@ -30,6 +30,7 @@ export default {
       let info = JSON.parse(await authManager.grabLogin());
       if (info) {
         this.prevLogIn = true;
+        console.log(info);
         this.$router.push({
           name: "app",
           params: {
@@ -44,6 +45,7 @@ export default {
         }, 250);
       }
     } catch (e) {
+      throw e;
       document.querySelector("#start-header").innerHTML =
         "Chatty Desktop cannot be run in browser context";
     }

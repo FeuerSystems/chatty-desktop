@@ -7,11 +7,12 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "tauri:build": "vue-cli-service tauri:build",
-    "tauri:serve": "vue-cli-service tauri:serve"
+    "tauri:serve": "vue-cli-service tauri:serve",
+    "vite": "node ./bin/vite"
   },
   "dependencies": {
     "@sweetalert2/theme-dark": "^5.0.7",
-    "@tauri-apps/api": "^1.0.0-beta.8",
+    "@tauri-apps/cli": "^1.0.0-beta.10",
     "@vue/composition-api": "^1.4.0-beta.0",
     "@vueuse/motion": "^2.0.0-beta.4",
     "core-js": "^3.6.5",
@@ -26,6 +27,7 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@tauri-apps/api": "^1.0.0-beta.8",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
@@ -36,6 +38,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
     "vue-cli-plugin-tauri": "~1.0.0-beta.6",
+    "vue-cli-plugin-vite": "~1.5.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

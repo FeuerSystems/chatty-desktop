@@ -1,12 +1,32 @@
 <template>
   <div class="user-card-gl" :id="'uc-' + id">
+    <transition name="fade">
+      <Avatar
+        v-if="editAvatar"
+        :img="newAvatar"
+        :auth="auth"
+        v-on:show="(boole) => (editAvatar = boole)"
+        v-on:data="
+          (data) => {
+            editAvatar = false;
+            showData(data);
+          }
+        "
+        v-on:idoao="showData"
+      />
+    </transition>
     <div class="user-card-container">
       <div class="user-card-inner">
-        <img class="user-card-img" :src="avatar" :id="'img-' + id" @click="openFileSave(0)" />
+        <img
+          class="user-card-img"
+          :src="editedAvatar != null ? editedAvatar : require('@/assets/svg/icons/missing.svg')"
+          :id="'self-img'"
+          @click="openFileSave(0)"
+        />
         <div class="user-card-contents">
           <span class="user-card-name">{{ name }}</span>
 
-          <div class="user-card-status" v-if="status.text || status.img">
+          <div class="user-card-status" v-if="status != null">
             <img v-if="status.img" :src="status.img" class="user-status-img" />
             <span v-if="status.text" class="user-status-txt">{{ status.text }}</span>
           </div>
@@ -25,9 +45,27 @@
 
 <script>
 import { open } from "@tauri-apps/api/dialog";
+import Avatar from "../../settings/Avatar.vue";
+
+function arrayBufferToBase64(buffer) {
+  return new Promise((resolve, reject) => {
+    var blob = new Blob([buffer], {
+      type: "application/octet-binary",
+    });
+    var reader = new FileReader();
+
+    reader.readAsDataURL(blob);
+    reader.onload = function (evt) {
+      var dataurl = evt.target.result;
+      resolve(dataurl.substr(dataurl.indexOf(",") + 1));
+    };
+    reader.onerror = (error) => reject(error);
+  });
+}
 export default {
   name: "usercard",
   props: {
+    auth: String,
     avatar: String,
     name: String,
     id: String,
@@ -36,26 +74,43 @@ export default {
       img: String,
     },
   },
+  mounted() {
+    let self = this;
+    window.addEventListener(
+      "newava",
+      function (data) {
+        console.log(data.detail);
+        self.editedAvatar = data.detail.avatar;
+      },
+      false
+    );
+  },
   methods: {
-    openFileSave(type) {
-      switch (type) {
-        case 0: {
-          open({
-            filters: [
-                  {
-                    name: "Images",
-                    extensions:  ["jpg", "jpeg", "png", "gif"],
-                  },
-                ]
-          });
-          break;
-        }
-        case 1: {
-          open();
-          break;
-        }
+    async openFileSave(type) {
+      let path = await open({
+        filters: [
+          {
+            name: "Images",
+            extensions: ["jpg", "jpeg", "png", "gif"],
+          },
+        ],
+      });
+      if (path != null) {
+        let file = await this.FileManager.retrieveBinaryExact(path);
+        let base64 = await arrayBufferToBase64(new Uint8Array(file));
+        this.newAvatar = "data:image/png;base64," + base64;
+        this.editAvatar = true;
       }
     },
+    showData(data) {},
+  },
+  components: { Avatar },
+  data() {
+    return {
+      editAvatar: false,
+      newAvatar: null,
+      editedAvatar: this.avatar,
+    };
   },
 };
 </script>
@@ -68,6 +123,8 @@ export default {
 .user-card-inner {
   background: rgb(27, 27, 27);
   display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 3px;
   border-radius: 5px;
 }
@@ -78,6 +135,7 @@ export default {
   vertical-align: middle;
   margin-top: 3px;
   transition: all 250ms ease;
+  padding: 4px;
 }
 .user-card-status {
   display: flex;
@@ -98,12 +156,12 @@ export default {
   transition: all 250ms ease;
 }
 .user-status-img:hover {
-  cursor: pointer;
+  cursor: alias;
   opacity: 0.8;
 }
 .user-card-img:hover {
   opacity: 0.8;
-  cursor: pointer;
+  cursor: alias;
 }
 .user-status-txt {
   text-align: center;
@@ -113,5 +171,12 @@ export default {
 }
 .user-card-options {
   display: flex;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

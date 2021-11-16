@@ -68,7 +68,7 @@
 
 <script>
 import "../assets/app.css";
-import BaseButton from "@/components/base/BaseButton.vue";
+import BaseButton from "@/components/base/BaseButton";
 import { verifyEmail } from "@/buildpack/Core/Utils/GenericUtils";
 let userMod;
 // Set element color to 'invalid' or red

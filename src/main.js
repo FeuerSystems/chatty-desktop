@@ -22,6 +22,30 @@ Vue.mixin(ChattyMixin);
 Vue.use(VueSweetalert2);
 Vue.use(MotionPlugin);
 Vue.use(VTooltip);
+// Error handle ALL components
+Vue.config.errorHandler = function (err, vm, info) {
+  const log = (location, text, obj) => {
+    if (!obj) {
+        console.log(
+            `%c ${location} %c ${text} %c`,
+            'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #FCFAFF; font-weight: bolder; font-family: Arial;',
+            'background:#2a2a2a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #5865F2; font-family: Arial;',
+            'background:transparent'
+        )
+    } else {
+        console.log(
+            `%c ${location} %c ${text} %c`,
+            'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #FCFAFF; font-weight: bolder; font-family: Arial;',
+            'background:#2a2a2a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #5865F2; font-family: Arial;',
+            'background:transparent',
+            obj
+        )
+    }
+    
+}
+  log(`[ErrorHandler] - From "${vm.$options.name}" ${vm.$options.parent == null ? '' : `(Parent: ${vm.$parent.$options.name})`}`, `Stack Below ⮛`);
+  console.log(err);
+}
 new Vue({
   render: (h) => h(App),
   router,

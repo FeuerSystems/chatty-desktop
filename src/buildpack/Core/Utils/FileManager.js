@@ -5,28 +5,49 @@ import {
   readTextFile,
   writeBinaryFile,
   removeFile,
+  readBinaryFile,
 } from "@tauri-apps/api/fs";
 
 export default class FileManager {
   constructor() {}
-
-  async retrieveFile(file, dir) {
+  async retrieveBinaryExact(filedir) {
+    return await readBinaryFile(`${filedir}`).catch((err) => {
+      console.warn(err);
+      return null;
+    });
+  }
+  async retrieveFile(file, dir, binary) {
     if (!dir) {
       let dd = await appDir();
-      let file1 = await readTextFile(`${dd}${file}`).catch((err) => {
-        console.warn(err);
-        return null;
-      });
-      return file1;
-    } else {
-      readTextFile(`${dir}/${file}`)
-        .then((data) => {
-          return data;
-        })
-        .catch((err) => {
+      if (binary) {
+        let file2 = await readBinaryFile(`${dd}${file}`).catch((err) => {
           console.warn(err);
           return null;
         });
+        return file2;
+      } else {
+        let file1 = await readTextFile(`${dd}${file}`).catch((err) => {
+          console.warn(err);
+          return null;
+        });
+        return file1;
+      }
+    } else {
+      if (binary) {
+        let file2 = await readBinaryFile(`${dir}${file}`).catch((err) => {
+          console.warn(err);
+          return null;
+        });
+      } else {
+        readTextFile(`${dir}/${file}`)
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => {
+            console.warn(err);
+            return null;
+          });
+      }
     }
   }
   async makeDir(dir, inpath) {

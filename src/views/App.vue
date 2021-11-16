@@ -2,13 +2,11 @@
   <div id="app-container">
     <ServerList id="server-list" />
     <selfpanel
-      :status="{
-        text: selfData.status.text,
-        img: selfData.status.img,
-      }"
+      :status="selfData.status"
       :name="selfData.name"
       :avatar="selfData.avatar"
       :id="selfData.id"
+      :auth="auth.auth"
       class="selfuser"
     />
   </div>
@@ -29,17 +27,22 @@ export default {
     },
   },
   async mounted() {
-    this.log(this.auth);
     if (!this.auth) {
       location.href = "/";
     }
     this.$store.dispatch("setSelf", this.auth);
     this.requireModules("rest");
     let Rest = this.Chatty.Rest.getModule("user");
+    console.log(this.auth);
     let selfCurrent = await Rest.getMe(this.auth.auth);
-    console.log(selfCurrent)
-    if (selfCurrent.ok) { this.$store.dispatch("setSelf", selfCurrent.json); }
-    else if (!selfCurrent.ok) {
+    console.log(selfCurrent);
+    if (selfCurrent.ok) {
+      selfCurrent.json.auth = this.auth.auth;
+      console.log(selfCurrent);
+      this.Chatty.AuthManager.saveLogin(JSON.stringify(selfCurrent.json), false);
+      this.$store.dispatch("setSelf", selfCurrent.json);
+      document.querySelector("#self-img").src = selfCurrent.json.avatar;
+    } else if (!selfCurrent.ok) {
       this.$store.dispatch("setSelf", {
         name: "Failed",
         avatar: require("../assets/svg/icons/missing.svg"),
@@ -67,7 +70,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 #app-container {
   display: grid;
   grid-template-columns: 71px 240px auto 240px;
@@ -108,4 +111,5 @@ body {
   font-family: var(--webf);
   background-image: url(../assets/svg/bg.svg);
 }
+
 </style>

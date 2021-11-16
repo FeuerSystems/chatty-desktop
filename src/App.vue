@@ -23,7 +23,7 @@ import "./assets/app.css";
 import { appWindow } from "@tauri-apps/api/window";
 
 export default {
-  name: "App",
+  name: "client",
   methods: {
     minimize() {
       appWindow.minimize();
