@@ -1,5 +1,7 @@
 <template>
   <div id="app-container">
+    <ChannelInfo id="channel-info" />
+    <Chat :loading="true" />
     <ServerList id="server-list" />
     <selfpanel
       :status="selfData.status"
@@ -9,15 +11,21 @@
       :auth="auth.auth"
       class="selfuser"
     />
+    
   </div>
 </template>
 
 <script>
 import selfpanel from "../components/app/global/selfpanel";
 import ServerList from "../components/app/global/ServerList";
+import ChannelInfo from "../components/app/global/ChannelInfo";
+import Chat from "../components/app/global/Chat/index";
+import ChattySocket from "../buildpack/WebSocket/ChattySocket";
+import Decoder from "../buildpack/WebSocket/API/Decoder";
+
 export default {
   name: "app",
-  components: { ServerList, selfpanel },
+  components: { ServerList, selfpanel, ChannelInfo, Chat },
   props: {
     auth: Object,
   },
@@ -27,18 +35,15 @@ export default {
     },
   },
   async mounted() {
+    this.requireModules("rest");
     if (!this.auth) {
       location.href = "/";
     }
-    this.$store.dispatch("setSelf", this.auth);
-    this.requireModules("rest");
+    this.$store.dispatch("setSelf", this.auth.user);
     let Rest = this.Chatty.Rest.getModule("user");
-    console.log(this.auth);
     let selfCurrent = await Rest.getMe(this.auth.auth);
-    console.log(selfCurrent);
     if (selfCurrent.ok) {
       selfCurrent.json.auth = this.auth.auth;
-      console.log(selfCurrent);
       this.Chatty.AuthManager.saveLogin(JSON.stringify(selfCurrent.json), false);
       this.$store.dispatch("setSelf", selfCurrent.json);
       document.querySelector("#self-img").src = selfCurrent.json.avatar;
@@ -66,6 +71,31 @@ export default {
     }
     this.$store.dispatch("setFriends", friends.json);
     this.$store.dispatch("removeFriend", 0);
+    this.Chatty.ws = new ChattySocket({
+      encoding: "zlib",
+      host: "wss://chatty-api.feuer.tech/ws",
+      preferredRegion: "US",
+      messageCacheSize: 50,
+    });
+    const ws = this.Chatty.ws;
+    ws.addDecoder(new Decoder(ws.encoding));
+    await ws.start();
+    ws.ws.binaryType = 'arraybuffer';
+    ws.getStream();
+    ws.startHeartbeat();
+    ws.login(this.auth.auth);
+    ws.events.on('message', (d) => {
+      let obj = {
+        id: d.message.identifier,
+        content: d.message.content,
+        user: d.user
+      };
+      this.$store.dispatch('addMessage', obj);
+      var container = document.querySelector("#main-chat-messages");
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    })
   },
 };
 </script>
@@ -78,7 +108,7 @@ export default {
   grid-template-areas:
     "SL SN CI CI"
     "SL CL CD UL"
-    "SL UI CD UL";
+    "SL UI CA UL";
   height: 100vh;
 }
 .selfuser {
@@ -106,10 +136,26 @@ export default {
 #server-list::-webkit-scrollbar {
   display: none;
 }
+#channel-info {
+  grid-area: CI;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+.messages {
+  grid-area: CD;
+  width: 100%;
+  height: 90%;
+  background: #242424;
+  border-radius: 15px;
+  margin-top: 67px;
+  margin-right: auto;
+  overflow: scroll;
+}
+
 html,
 body {
   font-family: var(--webf);
   background-image: url(../assets/svg/bg.svg);
 }
-
 </style>

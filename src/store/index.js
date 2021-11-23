@@ -15,7 +15,9 @@ export default new Vuex.Store({
       },
     ],
     servers: [],
-    self: { name: null },
+    currentChannel: null,
+    messages: [],
+    self: { },
   },
   mutations: {
     ADD_USER(state, user) {
@@ -33,6 +35,15 @@ export default new Vuex.Store({
     SET_SELF(state, self) {
       state.self = self;
     },
+    SET_CHANNEL(state, channel) {
+      state.currentChannel = channel;
+    },
+    SET_MESSAGES(state, messages) {
+      state.messages = messages;
+    },
+    ADD_MESSAGE(state, message) {
+      state.messages.push(message);
+    }
   },
   actions: {
     async setSelf({commit}, payload) {
@@ -64,6 +75,15 @@ export default new Vuex.Store({
         });
       });
     },
+    async setChannel({ commit }, payload) {
+      commit("SET_CHANNEL", payload);
+    },
+    async setMessages({commit}, payload) {
+      commit("SET_MESSAGES", payload);
+    },
+    async addMessage({commit}, payload) {
+      commit("ADD_MESSAGE", payload);
+    }
   },
   modules: {},
   getters: {

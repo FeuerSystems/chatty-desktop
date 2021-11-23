@@ -36,32 +36,36 @@ export class DefaultRestModule {
     this.endpoint = "https://chatty-api.feuer.tech";
   }
 }
-
 export class DM {
   constructor(client, auth) {
     this.client = client;
     this.auth = auth;
-    this.endpoint = "https://chatty-api.feuer.tech/";
+    this.endpoint = "https://chatty-api.feuer.tech";
   }
 
-  async getMessages(dm, limit, after) {
+  async getMessages(dm, limit, after, auth) {
     const limitParsed = !limit || isNaN(limit) ? 50 : limit;
     const afterParsed = !after || isNaN(after) ? "" : `&after=${after}`;
     return await this.client.restFetch(
-      `${this.endpoint}/dms/${dm}/messages?auth=${this.auth}&limit=${limitParsed}${afterParsed}`,
+      `${this.endpoint}​/v2/user/@me/channels/${dm}/messages?limit=${limitParsed}${afterParsed}`,
       "messages",
       {
         method: "GET",
+        headers: {
+          Authorization: auth
+        }
       }
     );
   }
 
-  async sendDMMessage(dm, content) {
-    return await this.client.restFetch(`${this.endpoint}/user/@me/dms/${dm}/message`, "message", {
+  async sendDMMessage(dm, content, auth) {
+    return await this.client.restFetch(`${this.endpoint}/v2/user/@me/channels/${dm}/messages`, "message", {
       method: "POST",
+      headers: {
+        Authorization: auth
+      },
       body: JSON.stringify({
-        auth: this.auth,
-        content,
+        content: content,
       }),
     });
   }

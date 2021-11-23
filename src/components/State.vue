@@ -30,7 +30,6 @@ export default {
       let info = JSON.parse(await authManager.grabLogin());
       if (info) {
         this.prevLogIn = true;
-        console.log(info);
         this.$router.push({
           name: "app",
           params: {

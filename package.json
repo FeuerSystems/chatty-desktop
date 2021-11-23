@@ -23,6 +23,7 @@
     "vue": "^2.6.11",
     "vue-advanced-cropper": "^1.9.0",
     "vue-router": "^3.5.3",
+    "vue-swatches": "^2.1.1",
     "vue-sweetalert2": "^5.0.2",
     "vuex": "^3.4.0"
   },

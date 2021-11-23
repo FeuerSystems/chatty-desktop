@@ -86,7 +86,6 @@ export default {
   },
   mounted() {
     this.requireModules("rest");
-    console.log(this.server);
   },
   data() {
     return {
@@ -115,7 +114,6 @@ export default {
         friend.id
       );
       if (req.ok) {
-        console.log(this.$store.state.friends.indexOf(friend));
         this.showOptions = false;
         this.$store.dispatch("removeFriend", this.$store.state.friends.indexOf(friend));
         this.$store.dispatch("addFriend", {
@@ -146,7 +144,7 @@ export default {
       //   document.querySelector(`#server-pill-${element.getAttribute("s-id")}`).style.display =
       //     "none";
     },
-    setActive(e) {
+    async setActive(e) {
       let element = e.srcElement;
       let alreadyActive = document.querySelector(`#server-item-true`);
       console.log(element.getAttribute("pending"));
@@ -165,6 +163,18 @@ export default {
       element.style.border = "var(--confirm) solid 2px";
       element.id = "server-item-true";
       element.setAttribute("active", true);
+      this.$store.dispatch("setChannel", this.server);
+      let dm = this.Chatty.Rest.getModule('dm');
+      console.log(this.$store.state.self.auth);
+      let res = await dm.getMessages(this.server.id, null, null, this.$store.state.self.auth);
+      if (res.json) {
+        
+      this.$store.dispatch("setMessages", res.json.messages);
+      var container = document.querySelector("#main-chat-messages");
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+      }
     },
     async addFriend() {
       const { value: friendID } = await this.$swal.fire({

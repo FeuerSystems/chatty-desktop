@@ -1,6 +1,6 @@
 <template>
-  <div class="user-card-gl" :id="'uc-' + id">
-    <transition name="fade">
+<div class="self-panel">
+   <transition name="fade">
       <Avatar
         v-if="editAvatar"
         :img="newAvatar"
@@ -15,6 +15,8 @@
         v-on:idoao="showData"
       />
     </transition>
+  <div class="user-card-gl" :id="'uc-' + id">
+   
     <div class="user-card-container">
       <div class="user-card-inner">
         <img
@@ -41,6 +43,8 @@
       </div>
     </div>
   </div>
+
+  </div>  
 </template>
 
 <script>
@@ -98,8 +102,8 @@ export default {
       if (path != null) {
         let file = await this.FileManager.retrieveBinaryExact(path);
         let base64 = await arrayBufferToBase64(new Uint8Array(file));
-        this.newAvatar = "data:image/png;base64," + base64;
         this.editAvatar = true;
+        this.newAvatar = "data:image/png;base64," + base64;
       }
     },
     showData(data) {},

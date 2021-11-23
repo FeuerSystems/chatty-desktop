@@ -28,6 +28,13 @@
     --warning-clicked: #cfbc4b;
     --danger: #F04747;
     --danger-clicked: #a73232;
+
+    /* Chat Coloring */
+    --send: #58cef29c;
+    --receive: #6757f29c;
+        /* Message Detail Coloring */
+        --msg-name: white;
+
 }
 
 .rd {
@@ -55,6 +62,10 @@
 .f,
 .flex {
     display: flex;
+}
+.if, 
+.inline-flex {
+    display: inline-flex
 }
 
 .c {
@@ -339,4 +350,49 @@ body {
     background: var(--primary) !important;
 }
 
-  
+.rounded {
+    border-radius: 50%;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 50ms ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.wrap {
+    flex-wrap: wrap;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #4a4d52;
+    border: 2px solid #282a2d;
+    border-radius: 10px;
+}
+  .vue-swatches__wrapper {
+      background: #2a2a2a !important;
+  }
+  .vue-swatches__container {
+      background: #1d1d1d !important;
+  }
+
+  .rp {
+      position: relative;
+  }
