@@ -3,7 +3,7 @@
     <div
       class="messages fc if"
       id="main-chat-messages"
-      style="z-index: 50"
+      style="z-index: 5"
       v-if="current"
       @mouseenter="hoverChat = true"
       @mouseleave="hoverChat = false"
