@@ -21,9 +21,14 @@
 <script>
 import "./assets/app.css";
 import { appWindow } from "@tauri-apps/api/window";
-
+import { Command } from '@tauri-apps/api/shell';
 export default {
   name: "client",
+  async mounted() {
+    const command = Command.sidecar('notifier')
+      const output = await command.execute()
+      console.log('SIDECAR', output);
+  },
   methods: {
     minimize() {
       appWindow.minimize();

@@ -35,16 +35,18 @@ export default class ChattySocket {
 
   async login(creds) {
     if (!this.ws) throw new Error("Websocket hasn't been started");
+    let payload = {
+      op: 2,
+      token: creds,
+      properties: {
+        os: getOS(),
+        browser: getBrowserName(),
+        buildNumber: '1.9.2',
+      },
+    };
+    console.log(`[WS -> Login]: ${JSON.stringify(payload)}`, payload);
     this.ws.send(
-      JSON.stringify({
-        op: 2,
-        token: creds,
-        properties: {
-          os: getOS(),
-          browser: getBrowserName(),
-          buildNumber: '1.9.2',
-        },
-      }),
+      JSON.stringify(payload),
     );
   }
 
@@ -79,47 +81,47 @@ export default class ChattySocket {
       switch (op) {
         case Events.op.Dispatch: {
           this.events.emit('authenticated', json.d);
-          console.log('[WS] - Authenticated', json.d);
+          console.log('[WS]: Authenticated', json.d);
           break;
         }
         case Events.op.Heartbeat: {
           this.events.emit('heartbeat', json.d);
-          console.log('[WS] - 💓', json.d);
+          console.log('[WS]: 💓', json.d);
           break;
         }
         case Events.op.Identify: {
           this.events.emit('identify', json.d);
-          console.log('[WS] - Identify', json.d);
+          console.log('[WS]: Identify', json.d);
           break;
         }
         case Events.op.Presence: {
           this.events.emit('presence', json.d);
-          console.log('[WS] - Presence', json.d);
+          console.log('[WS]: Presence', json.d);
           break;
         }
         case Events.op.Voice: {
           this.events.emit('voice', json.d);
-          console.log('[WS] - Voice', json.d);
+          console.log('[WS]: Voice', json.d);
           break;
         }
         case Events.op.Resume: {
           this.events.emit('resume', json.d);
-          console.log('[WS] - Resume', json.d);
+          console.log('[WS]: Resume', json.d);
           break;
         }
         case Events.op.Invalid: {
           this.events.emit('invalid', json.d);
-          console.log('[WS] - Invalid', json.d);
+          console.log('[WS]: Invalid', json.d);
           break;
         }
         case Events.op.HELLO: {
           this.events.emit('hello', json.d);
-          console.log('[WS] - HELLO', json.d);
+          console.log('[WS]: HELLO', json.d);
           break;
         }
         case Events.op.ACK: {
           this.events.emit('ack', json.d);
-          console.log('[WS] - ACK', json.d);
+          console.log('[WS]: ACK', json.d);
           break;
         }
         case 9: {
@@ -127,14 +129,17 @@ export default class ChattySocket {
           switch (type) {
             case Events.Recieve_Event.Message: {
               this.events.emit('message', json.d);
+              console.log('[WS -> Receive]: MESSAGE', json.d);
               break;
             }
             case Events.Recieve_Event.Presence: {
               this.events.emit('presence', json.d);
+              console.log('[WS -> Receive]: Presence', json.d);
               break;
             }
             case Events.Recieve_Event.Profile: {
               this.events.emit('profile', json.d);
+              console.log('[WS -> Receive]: Profile', json.d);
               break;
             }
           }

@@ -72,7 +72,7 @@ export default {
   font-size: 25px;
   width: 50vw;
   max-width: 50vw;
-  background: #222222;
+  background: #1b1b1b;
   border: none;
   padding: 10px;
   transition: opacity 200ms linear, color 200ms linear;

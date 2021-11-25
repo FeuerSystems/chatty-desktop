@@ -4,7 +4,7 @@
     "version": "0.0.18"
   },
   "build": {
-    "distDir": "../dist",
+    "distDir": "Set automatically by Vue CLI plugin",
     "devPath": "Set automatically by Vue CLI plugin",
     "beforeDevCommand": "",
     "beforeBuildCommand": ""
@@ -16,7 +16,7 @@
       "identifier": "org.chatty.desktop",
       "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
       "resources": [],
-      "externalBin": [],
+      "externalBin": ["C:\\Users\bryso\\Desktop\\Chatty Desktop\\chatty\\src-tauri\\binaries\\notifier-x86_64-pc-windows-msvc.exe"],
       "copyright": "MIT",
       "category": "DeveloperTool",
       "shortDescription": "A simple chat app for your friends",
