@@ -16,6 +16,12 @@ export default class FileManager {
       return null;
     });
   }
+  async retrieveFileExact(filedir) {
+    return await readTextFile(`${filedir}`).catch((err) => {
+      console.warn(err);
+      return null;
+    });
+  }
   async retrieveFile(file, dir, binary) {
     if (!dir) {
       let dd = await appDir();

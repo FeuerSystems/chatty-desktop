@@ -10,7 +10,8 @@ import '@sweetalert2/theme-dark/dark.css';
 import { MotionPlugin } from '@vueuse/motion'
 import router from './router';
 import  VTooltip  from 'v-tooltip';
-import store from './store'
+import store from './store';
+import { NotificationService } from './buildpack/Notification/NotificationService';
 // Set Decorations to false, we have our own icons :)
 appWindow.setDecorations(false);
 // Disable production tip
@@ -51,12 +52,18 @@ new Vue({
   router,
   store,
 
-  created() {
+  async created() {
     let core = new ChattyCore({
       allowExperiments: true,
       developer: true,
       production: false 
     }, Vue.prototype);
     core.build();
+    let notifier = new NotificationService({
+      port: 6789,
+      os: 'WIN'
+    });
+   
+    Vue.prototype.Chatty.Notifier = notifier;
   }
 }).$mount('#app');

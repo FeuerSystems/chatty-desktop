@@ -9,7 +9,6 @@
       :avatar="selfData.avatar"
       :id="selfData.id"
       :auth="auth.auth"
-      class="selfuser"
     />
     
   </div>
@@ -39,6 +38,7 @@ export default {
     if (!this.auth) {
       location.href = "/";
     }
+    this.Chatty.Notifier.start();
     this.$store.dispatch("setSelf", this.auth.user);
     let Rest = this.Chatty.Rest.getModule("user");
     let selfCurrent = await Rest.getMe(this.auth.auth);
@@ -90,12 +90,33 @@ export default {
         content: d.message.content,
         user: d.user
       };
+      ws.events.on('presence', (d) => {
+        console.log(d);
+      });
       this.$store.dispatch('addMessage', obj);
+      this.Chatty.Notifier.sendToast({
+        op: 2,
+        type: 'notify',
+        d: {
+          texts: [`${obj.user.name} Sent a message`, obj.content]
+          // textboxes: [{
+          //   title: 'Reply Message',
+          //   placeholder: `Write to ${obj.user.name}`,
+          // }],
+          // buttons: [{
+          //   Content: "Reply",
+          //   ID: `${obj.user.id}-2`
+          // }]
+        }
+      })
       var container = document.querySelector("#main-chat-messages");
       if (container) {
         container.scrollTop = container.scrollHeight;
       }
-    })
+    });
+     
+    
+   
   },
 };
 </script>
@@ -111,7 +132,7 @@ export default {
     "SL UI CA UL";
   height: 100vh;
 }
-.selfuser {
+.self-panel-container {
   grid-area: UI;
   display: flex;
   flex-direction: row;

@@ -55,6 +55,7 @@ export default {
   },
   methods: {
     updateMargin(e) {
+     
       this.currentMarginValue = e.srcElement.value + "%";
     },
   },
@@ -96,5 +97,9 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: ew-resize;
   background: var(--primary);
   border-radius: 50%;
+}
+.fixed {
+  position: fixed;
+  margin-top: 100%;
 }
 </style>

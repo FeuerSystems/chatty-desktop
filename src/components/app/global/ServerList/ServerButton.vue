@@ -19,7 +19,7 @@
       @mouseleave="!server.pending ? voidPill : ''"
       :s-id="server.id"
       @click="setActive"
-      v-tooltip.right-start="server.info"
+      v-tooltip.right-start="`<div><span>${this.server.name}<br><br></span> <div class='status-tooltip'>Status: <div class='fr f'><span class='status-text-container-tooltip'>Text:</span> ifsif</div></div>`"
       :id="`server-item-false`"
       :pending="server.pending"
     />

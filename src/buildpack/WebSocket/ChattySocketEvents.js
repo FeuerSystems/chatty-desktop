@@ -32,6 +32,7 @@ module.exports = {
     Message: 0,
     Presence: 1,
     Profile: 2,
+    SELF_MESSAGE: 3
   },
 
   Internal_Events: {

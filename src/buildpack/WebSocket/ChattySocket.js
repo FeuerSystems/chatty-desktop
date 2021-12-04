@@ -142,6 +142,11 @@ export default class ChattySocket {
               console.log('[WS -> Receive]: Profile', json.d);
               break;
             }
+            case Events.Recieve_Event.SELF_MESSAGE: {
+              this.events.emit('self_message', json.d);
+              console.log('[WS -> Self Message]: Self Message', json.d);
+              break;
+            }
           }
           break;
         }

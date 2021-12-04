@@ -190,7 +190,7 @@ export class User {
       }
     );
   }
-  async update(auth, typeChange, valueChange, obj) {
+  async update(auth, typeChange, valueChange, animated, obj) {
     if (!obj) {
       return await this.client.restFetch(`${this.endpoint}/@me`, "user", {
         method: "PATCH",
@@ -198,6 +198,7 @@ export class User {
           auth: auth,
           change: {
             type: typeChange,
+            animated: animated,
             new: valueChange,
             obj: null,
           },

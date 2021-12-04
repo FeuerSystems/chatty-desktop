@@ -43,10 +43,13 @@ export default new Vuex.Store({
     },
     ADD_MESSAGE(state, message) {
       state.messages.push(message);
+    },
+    UPDATE_MESSAGE(state, message) {
+
     }
   },
   actions: {
-    async setSelf({commit}, payload) {
+    async setSelf({ commit }, payload) {
       commit("SET_SELF", payload);
     },
     async addFriend({ commit }, payload) {
@@ -78,10 +81,10 @@ export default new Vuex.Store({
     async setChannel({ commit }, payload) {
       commit("SET_CHANNEL", payload);
     },
-    async setMessages({commit}, payload) {
+    async setMessages({ commit }, payload) {
       commit("SET_MESSAGES", payload);
     },
-    async addMessage({commit}, payload) {
+    async addMessage({ commit }, payload) {
       commit("ADD_MESSAGE", payload);
     }
   },

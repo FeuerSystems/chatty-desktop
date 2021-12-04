@@ -24,6 +24,12 @@ export default new Router({
       name: 'app',
       props: true,
       component: () => import('./views/App')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      props: true,
+      component: () => import('./views/Settings')
     }
   ]
 })
