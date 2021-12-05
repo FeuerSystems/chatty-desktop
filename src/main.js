@@ -12,6 +12,7 @@ import router from './router';
 import  VTooltip  from 'v-tooltip';
 import store from './store';
 import { NotificationService } from './buildpack/Notification/NotificationService';
+import Clipboard from 'v-clipboard';
 // Set Decorations to false, we have our own icons :)
 appWindow.setDecorations(false);
 // Disable production tip
@@ -23,6 +24,7 @@ Vue.mixin(ChattyMixin);
 Vue.use(VueSweetalert2);
 Vue.use(MotionPlugin);
 Vue.use(VTooltip);
+Vue.use(Clipboard);
 // Error handle ALL components
 Vue.config.errorHandler = function (err, vm, info) {
   const log = (location, text, obj) => {

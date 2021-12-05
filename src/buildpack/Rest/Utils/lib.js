@@ -111,7 +111,16 @@ export class User {
         );
     }
   }
-
+  async getDevices(auth) {
+    if (!auth) throw new SyntaxError("Auth can't be null");
+    console.log(auth);
+    return await this.client.restFetch(`${this.endpoint}/@me/devices`, "user/devices", {
+      method: 'GET',
+      headers: {
+        Authorization: auth
+      }
+    })
+  }
   async getMe(auth) {
     if (!auth) throw new SyntaxError("Auth can't be null");
     return await this.client.restFetch(`${this.endpoint}/@me`, "user/me", {
