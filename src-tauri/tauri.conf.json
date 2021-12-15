@@ -55,7 +55,8 @@
         "fullscreen": false,
         "minWidth": 1120,
         "minHeight": 700,
-        "visible": true
+        "visible": true,
+        "focus": true
       }
     ],
     "security": {

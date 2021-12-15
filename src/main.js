@@ -13,6 +13,11 @@ import  VTooltip  from 'v-tooltip';
 import store from './store';
 import { NotificationService } from './buildpack/Notification/NotificationService';
 import Clipboard from 'v-clipboard';
+import devtools from '@vue/devtools';
+import VueSmoothScroll from 'vue2-smooth-scroll';
+import VueResource from 'vue-resource';
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 // Set Decorations to false, we have our own icons :)
 appWindow.setDecorations(false);
 // Disable production tip
@@ -21,10 +26,16 @@ Vue.config.productionTip = false;
 Vue.prototype.FileManager = new FileManager();
 
 Vue.mixin(ChattyMixin);
+Vue.use(devtools);
 Vue.use(VueSweetalert2);
 Vue.use(MotionPlugin);
 Vue.use(VTooltip);
 Vue.use(Clipboard);
+Vue.use(VueSmoothScroll);
+Vue.use(VueResource);
+Vue.use(Toast);
+Vue.prototype.$version = "1.9.5";
+Vue.prototype.$hash = "63b1f796aa850ee9fc4721a7cf626b9293be9a5e";
 // Error handle ALL components
 Vue.config.errorHandler = function (err, vm, info) {
   const log = (location, text, obj) => {

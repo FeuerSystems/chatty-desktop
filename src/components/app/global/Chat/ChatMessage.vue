@@ -2,6 +2,7 @@
   <div
     :class="`message ${sender ? 'sender' : 'receiever'}`"
     :style="(sender) ? `margin-left: ${margins}` : `margin-right: ${margins}`"
+    :msgid="id"
     @mouseenter="showContext = true"
     @mouseleave="showContext = false"
   >
@@ -9,13 +10,14 @@
       <img
         :src="user.avatar == null ? require('@/assets/svg/icons/missing.svg') : user.avatar"
         class="user-message-avatar"
+        v-if="!continuation"
       />
-      <div class="contents-wrap fc wrap">
+      <div class="contents-wrap fc wrap" :style="(continuation == true) ? 'margin-left: 49px;' : ''">
         <div class="details">
-          <span
-            ><span class="user-message-name">{{ user.name }} </span>
-            <span class="user-message-id">({{ user.id }})</span></span
-          >
+          <span>
+            <span class="user-message-name" v-if="!continuation">{{ user.name }} </span>
+            <span class="user-message-timestamp" v-if="!continuation">Today at {{getTimestamp(created.milli)}}</span>
+           </span>
         </div>
         <div class="contents">
           <span class="message-text-contents">{{ text }}</span>
@@ -43,11 +45,15 @@
 <script>
 import VSwatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.css";
+
 export default {
   props: {
     text: String,
     user: Object,
     sender: Boolean,
+    id: String,
+    created: Object,
+    continuation: Boolean,
     margins: {
       type: String,
       required: false,
@@ -55,7 +61,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.props);
+    
   },
   components: { VSwatches },
   data() {
@@ -97,38 +103,33 @@ export default {
    border-radius: 16px;
 }
 .message-container {
-  background: #424242;
+
   display: inline-flex;
-  padding: 5px;
+  padding: 2px;
   width: fit-content;
-  margin-top: 5px;
-  border-radius: 15px;
-  padding-right: 62px !important;
   position: relative;
   
 }
 .sender1 {
   transition: background 50ms ease;
-  background: var(--send) !important;
-  margin-left: 10px;
   animation: slideSideways 150ms ease;
 }
 .receiever1 {
   transition: background 50ms ease;
-  background: var(--receive) !important;
-  margin-right: 10px;
   animation: slideSideways 150ms ease;
 }
-.sender {
+/* .sender {
   margin-right: auto;
 }
 .receiever {
   margin-left: auto;
-}
+} */
 .message-text-contents {
-  color: white;
-  font-family: var(--webf);
-  white-space: pre-line;
+  color: #dcdddd;
+  font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+  white-space: break-spaces;
+      font-weight: 400;
+      line-height: 1.375rem;
 }
 .contents {
   margin-left: 10px;
@@ -161,5 +162,20 @@ export default {
   to {
     transform: translateX(0);
   }
+}
+.message:hover {
+  background: #2b2b2b;
+}
+
+.user-message-timestamp {
+  font-family: Arial;
+  font-weight: normal;
+    height: 1.25rem;
+    cursor: default;
+    pointer-events: none;
+    font-weight: 500;
+    font-size: 75%;
+    color: #72767d;
+    margin-top: 5px;
 }
 </style>

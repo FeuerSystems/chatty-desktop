@@ -2,6 +2,9 @@
   <div id="app-container">
     <ChannelInfo id="channel-info" />
     <Chat :loading="true" />
+     <ChatInput id="chat-input">
+        
+      </ChatInput>
     <ServerList id="server-list" />
     <selfpanel
       :status="selfData.status"
@@ -21,10 +24,11 @@ import ChannelInfo from "../components/app/global/ChannelInfo";
 import Chat from "../components/app/global/Chat/index";
 import ChattySocket from "../buildpack/WebSocket/ChattySocket";
 import Decoder from "../buildpack/WebSocket/API/Decoder";
-
+import ChatInput from "../components/app/global/Chat/ChatInput";
+import {appWindow} from "@tauri-apps/api/window";
 export default {
   name: "app",
-  components: { ServerList, selfpanel, ChannelInfo, Chat },
+  components: { ServerList, selfpanel, ChannelInfo, Chat, ChatInput },
   props: {
     auth: Object,
   },
@@ -39,6 +43,11 @@ export default {
       location.href = "/";
     }
     this.Chatty.Notifier.start();
+     this.Chatty.Notifier.getStream();
+    console.log(this.Chatty.Notifier.events);
+    this.Chatty.Notifier.events.on('input', async (e) => {
+      await appWindow.setFocus();
+    });
     this.$store.dispatch("setSelf", this.auth.user);
     let Rest = this.Chatty.Rest.getModule("user");
     let selfCurrent = await Rest.getMe(this.auth.auth);
@@ -85,9 +94,12 @@ export default {
     ws.startHeartbeat();
     ws.login(this.auth.auth);
     ws.events.on('message', (d) => {
+      console.log(d);
       let obj = {
-        id: d.message.identifier,
+        id: d.message.id,
         content: d.message.content,
+        created: d.message.created,
+
         user: d.user
       };
       ws.events.on('presence', (d) => {
@@ -108,12 +120,13 @@ export default {
           //   ID: `${obj.user.id}-2`
           // }]
         }
-      })
+      });
       var container = document.querySelector("#main-chat-messages");
       if (container) {
         container.scrollTop = container.scrollHeight;
       }
     });
+   
      
     
    
@@ -134,24 +147,17 @@ export default {
 }
 .self-panel-container {
   grid-area: UI;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px;
-  border-radius: 15px;
+
 }
 #server-list {
   grid-area: SL;
   display: flex;
   flex-direction: column;
   background-color: var(--tertiary);
-  max-height: 85vh;
+  max-height: 100vh;
   padding: 15px;
-  border-radius: 15px;
   overflow-y: scroll;
-  margin-top: 30px;
-  margin-right: 10px;
+  margin-top: 24px;
   background-color: #242424;
 }
 #server-list::-webkit-scrollbar {
@@ -164,19 +170,20 @@ export default {
   margin-top: 30px;
 }
 .messages {
-  grid-area: CD;
-  width: 100%;
-  height: 90%;
-  background: #242424;
-  border-radius: 15px;
-  margin-top: 67px;
-  margin-right: auto;
-  overflow: scroll;
+    grid-area: CD;
+    width: 100%;
+    
+    margin-top: 40px;
+    margin-right: auto;
+    overflow: scroll;
 }
-
+#chat-input {
+  grid-area: CA;
+  width: 100%;
+}
 html,
 body {
   font-family: var(--webf);
-  background-image: url(../assets/svg/bg.svg);
+  background-color: var(--dark);
 }
 </style>

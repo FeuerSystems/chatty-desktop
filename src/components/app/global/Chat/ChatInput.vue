@@ -63,24 +63,25 @@ export default {
 
 <style scoped>
 .chat-input {
-  margin-top: -20px;
   margin-right: auto;
   margin-left: auto;
 }
 .forminput {
-  font-family: var(--oxy) !important;
-  font-size: 25px;
-  width: 50vw;
-  max-width: 50vw;
-  background: #1b1b1b;
-  border: none;
-  padding: 10px;
-  transition: opacity 200ms linear, color 200ms linear;
-  color: var(--nqw);
-  opacity: 0.8;
-  max-height: 250px;
-  overflow-y: scroll;
-  overflow-wrap: break-word;
+    font-family: var(--oxy) !important;
+    width: 99.3%;
+    height: 70%;
+    /* max-width: 50vw; */
+    background: #1b1b1b;
+    border: none;
+    padding: 10px;
+    transition: opacity 200ms linear, color 200ms linear;
+    color: var(--nqw);
+    opacity: 0.8;
+    margin-top: auto;
+    margin-bottom: auto;
+    max-height: 250px;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
 }
 
 .forminput:focus {

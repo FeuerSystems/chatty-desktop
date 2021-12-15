@@ -3,6 +3,7 @@
     <ServerButton isHome :server="{ id: '-1' }" />
     <div class="separator" />
     <ServerButton v-for="server in friendData" :key="server.id" :server="server" />
+    <div class="separator green" />
     <ServerButton :server="{ id: 1, friendButton: true }"/>
   </div>
 </template>
@@ -30,5 +31,10 @@ export default {
   border-bottom: solid 2px var(--primary);
   margin-bottom: 8px;
   border-radius: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.green {
+  border-color: var(--confirm) !important;
 }
 </style>

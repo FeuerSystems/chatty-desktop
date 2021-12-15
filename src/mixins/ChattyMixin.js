@@ -1,6 +1,7 @@
 import ChattySocket from "../buildpack/WebSocket/ChattySocket";
 import RestClient from "../buildpack/Rest/RestClient";
 import Decoder from "../buildpack/WebSocket/API/Decoder";
+import moment from "moment";
 export default {
   methods: {
     invertColor(hex) {
@@ -125,5 +126,8 @@ export default {
         );
       }
     },
+    getTimestamp(time) {
+      return moment(time).format('h:mm a');
+  },
   },
 };

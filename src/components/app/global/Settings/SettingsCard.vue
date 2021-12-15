@@ -3,7 +3,7 @@
         <img height="32px" width="fit-content" :src="icon" :id="group + '-img'" ref="group-img" :class="`settings-card-img ${circle ? 'circle' : ''}`" @click="(e) => {(circle) ? copyAvatar(e) : null}" :copy="circle"/>
         <span class="settings-card-name" v-html="text"/>
         <div class="statements">
-            <span v-for="(property, index)  in properties" :key="index" class="statement shift"><b class="pc">⮞</b> <span v-html="property"></span><br></span>
+            <span v-for="(property, index) in properties" :key="index" class="statement shift"><b class="pc">⮞</b> <span v-html="property"></span><br></span>
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@ export default {
     name: 'settings-card',
     props: {
         text: String,
-        icon: Object,
+        icon: String,
         circle: Boolean,
         group: String,
         properties: Array
@@ -68,7 +68,5 @@ export default {
   cursor: copy;
   opacity: 1;
 }
-.circle {
-    border-radius: 50%;
-}
+
 </style>

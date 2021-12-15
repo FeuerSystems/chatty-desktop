@@ -22,14 +22,10 @@ export default {
 
 <style scoped>
 .innerbar {
-    background: rgb(34, 34, 34);
     padding: 5px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 15px;
-    width: fit-content;
-    border: var(--confirm) 2px solid;
+    width: 100%;
     padding: 7px;
 }
 .channel-icon {
