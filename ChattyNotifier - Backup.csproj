@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
+        <PublishSingleFile>true</PublishSingleFile>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+        <PlatformTarget>win-64</PlatformTarget>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ApplicationIcon>chatty.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Fleck" Version="1.2.0"/>
+        <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="TinyMessenger" Version="1.4.0-alpha3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="WindowsAPICodePack" Version="1.1.2"/>
+    </ItemGroup>
+</Project>
