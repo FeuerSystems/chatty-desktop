@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
 /dist
-
+# Other (TAURI)
+/src-tauri/WixTools
+/src-tauri/target
+/src-tauri/bin/notify-x86_64-pc-windows-msvc.exe
 
 # local env files
 .env.local
