@@ -12,9 +12,6 @@
         <span alt="close">🗙</span>
       </div>
     </div>
-    <div class="notification-shade" hidden>
-      <span>Processing...</span>
-    </div>
     <transition name="fade">
       <router-view />
     </transition>
@@ -24,14 +21,17 @@
 <script>
 import "./assets/app.css";
 import { appWindow } from "@tauri-apps/api/window";
-import { listen } from "@tauri-apps/api/event";
-
+import { listen } from '@tauri-apps/api/event'
 export default {
   name: "client",
   mounted() {
+<<<<<<< HEAD
     this.$on("offline", () => {
       alert("You are offline! The website will not work");
     });
+=======
+    console.log(this);
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
   },
   methods: {
     minimize() {
@@ -84,8 +84,16 @@ export default {
   height: 30px;
   position: absolute;
   display: inline-block;
+<<<<<<< HEAD
   font-weight: bold;
   color: gray;
+=======
+  background-image: linear-gradient(92deg, #f35626ab, #feab3aab);
+  color: #f35626ab;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hue 10s infinite linear;
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
   overflow: hidden;
   user-select: none;
   padding: 8px;
@@ -113,8 +121,6 @@ html {
   overflow: hidden;
   height: 100%;
   width: 100%;
-  margin: 0 !important;
-  scroll-behavior: smooth;
 }
 #start-header {
   font-family: var(--oxy);
@@ -138,40 +144,18 @@ html {
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s;
-  transition: all 0.3s linear;
+  transition: all .3s linear;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 .show-enter-active,
 .show-leave-enter {
-  transform: translateX(0);
-  transition: all 0.3s linear;
+    transform: translateX(0);
+    transition: all .3s linear;
 }
 .show-enter,
 .show-leave-to {
-  transform: translateX(100%);
-}
-.blink {
-  animation: blink 2s infinite both;
-}
-.notification-shade {
-  position: absolute;
-  top: 45px;
-  left: 80px;
-  color: var(--primary);
-  font-weight: bold;
-}
-
-@keyframes blink {
-  0%,
-  50%,
-  100% {
-    opacity: 1;
-  }
-  25%,
-  75% {
-    opacity: 0;
-  }
+    transform: translateX(100%);
 }
 </style>

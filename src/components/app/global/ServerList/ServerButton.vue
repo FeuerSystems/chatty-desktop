@@ -19,9 +19,7 @@
       @mouseleave="!server.pending ? voidPill : ''"
       :s-id="server.id"
       @click="setActive"
-      v-tooltip.right-start="
-        `<div><span>${this.server.name}<br><br></span> <div class='status-tooltip'>Status: <div class='fr f'><span class='status-text-container-tooltip'>Text:</span>ifsif</div></div>`
-      "
+      v-tooltip.right-start="`<div><span>${this.server.name}<br><br></span> <div class='status-tooltip'>Status: <div class='fr f'><span class='status-text-container-tooltip'>Text:</span> ifsif</div></div>`"
       :id="`server-item-false`"
       :pending="server.pending"
     />
@@ -166,18 +164,16 @@ export default {
       element.id = "server-item-true";
       element.setAttribute("active", true);
       this.$store.dispatch("setChannel", this.server);
-      let dm = this.Chatty.Rest.getModule("dm");
+      let dm = this.Chatty.Rest.getModule('dm');
       console.log(this.$store.state.self.auth);
       let res = await dm.getMessages(this.server.id, null, null, this.$store.state.self.auth);
       if (res.json) {
-        this.$store.dispatch("setEndMessage", res.json.end);
-        this.$store.dispatch("setMessages", res.json.messages);
-        var container = document.querySelector("#main-chat-messages");
-        if (container) {
-          setTimeout(() => {
-            container.scroll({ left: 0, top: container.scrollHeight, behavior: "smooth" });
-          }, 50);
-        }
+        
+      this.$store.dispatch("setMessages", res.json.messages);
+      var container = document.querySelector("#main-chat-messages");
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
       }
     },
     async addFriend() {

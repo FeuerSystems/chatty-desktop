@@ -99,12 +99,14 @@ export default {
 
 <style scoped>
 .chat-input {
+  margin-top: -20px;
   margin-right: auto;
   margin-left: auto;
   line-height: 30px;
    background: #1b1b1b;
 }
 .forminput {
+<<<<<<< HEAD
     font-family: var(--oxy) !important;
     width: 99.3%;
     height: 100%;
@@ -120,6 +122,21 @@ export default {
     max-height: 250px;
     overflow-y: scroll;
     overflow-wrap: break-word;
+=======
+  font-family: var(--oxy) !important;
+  font-size: 25px;
+  width: 50vw;
+  max-width: 50vw;
+  background: #1b1b1b;
+  border: none;
+  padding: 10px;
+  transition: opacity 200ms linear, color 200ms linear;
+  color: var(--nqw);
+  opacity: 0.8;
+  max-height: 250px;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 }
 .forminput::-webkit-scrollbar {
   display: none;

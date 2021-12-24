@@ -3,72 +3,48 @@
     <div
       class="messages fc if"
       id="main-chat-messages"
-      style="z-index: 5; overflow-x: hidden;"
+      style="z-index: 5"
       v-if="current"
       @mouseenter="hoverChat = true"
       @mouseleave="hoverChat = false"
-      ref="main-chat"
     >
       <ChatMessage
         v-for="message in messages"
         :key="message.id"
         :user="message.user"
         :text="message.content"
-        :id="message.id"
         :sender="!(self.id === message.user.id)"
         :randomvalue="self"
         :margins="currentMarginValue"
-        :created="message.created"
-        :continuation="verifyContinuation(messages, message)"
       />
+<<<<<<< HEAD
+=======
+      <ChatInput id="chat-input">
+        <div>
+            <span class="ta cc slider-ctx">Message Margin</span>
+          <div class="chat-context">
+            <input
+              type="range"
+              id="chat-spacing"
+              name="chat-spacing"
+              min="0"
+              max="100"
+              @input="updateMargin"
+              v-model="stateMarginValue"
+            />
+          </div>
+        </div>
+      </ChatInput>
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
     </div>
   </transition>
 </template>
 
 <script>
-import ChatMessage from "./ChatMessage";
+import ChatMessage from "./ChatMessage.vue";
+import ChatInput from "./ChatInput.vue";
 export default {
-  components: { ChatMessage },
-  async mounted() {
-    this.requireModules("rest");
-    if (this.$store.state.currentChannel.id == 0) {
-      this.$store.dispatch("setMessages", [{content: "Shhh you aren't supposed to see this 🤫", user: {name: 'Ur left testy', id: 0}, created: {milli: 0}}]);
-      return;
-    }
-  },
-  updated() {
-    let dm = this.Chatty.Rest.getModule("dm");
-    this.$nextTick(function () {
-      let container = this.$refs["main-chat"];
-      container.onscroll = async () => {
-        let top = container.scrollTop;
-        if (top === 0) {
-          let before = container.children.item(0);
-          if (this.$store.state.messageEnd === container.children.item(0).getAttribute("msgid"))
-            return;
-          let res = await dm.getMessages(
-            this.$store.state.currentChannel.id,
-            null,
-            container.children.item(0).getAttribute("msgid"),
-            this.$store.state.self.auth
-          );
-
-          this.$store.dispatch("setMessages", res.json.messages.concat(this.$store.state.messages));
-          setTimeout(() => {
-            const containerChildren = [...container.children];
-            containerChildren.forEach((element) => {
-              if (element.getAttribute("msgid") == before.getAttribute("msgid")) {
-                container.scroll({
-                  left: 0,
-                  top: element.getBoundingClientRect().top,
-                });
-              }
-            });
-          }, 50);
-        }
-      };
-    });
-  },
+  components: { ChatMessage, ChatInput },
   computed: {
     messages() {
       return this.$store.state.messages;
@@ -77,27 +53,13 @@ export default {
       return this.$store.state.currentChannel;
     },
     self() {
-      return this.$store.state.self;
-    },
+        return this.$store.state.self;
+    }
   },
   methods: {
     updateMargin(e) {
+     
       this.currentMarginValue = e.srcElement.value + "%";
-    },
-    checkOutput(e) {
-      console.log(e);
-    },
-    verifyContinuation(messages, message) {
-      if (messages[0] == message) return false;
-      let prevMessage = messages[messages.findIndex((m) => m.id == message.id) - 1];
-      if (
-        prevMessage.user.id == message.user.id &&
-        message.created.sec - prevMessage.created.sec <= 60
-      ) {
-        return true;
-      } else if (prevMessage.user.id != message.user.id) {
-        return false;
-      }
     },
   },
   data() {
@@ -112,7 +74,7 @@ export default {
 
 <style scoped>
 .slider-ctx {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 #chat-input {
   margin-top: auto;

@@ -1,7 +1,6 @@
 import ChattySocket from "../buildpack/WebSocket/ChattySocket";
 import RestClient from "../buildpack/Rest/RestClient";
 import Decoder from "../buildpack/WebSocket/API/Decoder";
-import moment from "moment";
 export default {
   methods: {
     invertColor(hex) {
@@ -127,11 +126,14 @@ export default {
         );
       }
     },
+<<<<<<< HEAD
     getTimestamp(time) {
       return moment(time).format("h:mm a");
     },
     getFileFromPath(path) {
       return path.replace(/^.*[\\\/]/, "");
     },
+=======
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
   },
 };

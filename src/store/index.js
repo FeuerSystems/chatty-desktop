@@ -17,7 +17,6 @@ export default new Vuex.Store({
     servers: [],
     currentChannel: null,
     messages: [],
-    messageEnd: String,
     self: { },
   },
   mutations: {
@@ -47,9 +46,6 @@ export default new Vuex.Store({
     },
     UPDATE_MESSAGE(state, message) {
 
-    },
-    SET_END_MESSAGE(state, messageID) {
-      state.messageEnd = messageID;
     }
   },
   actions: {
@@ -90,9 +86,6 @@ export default new Vuex.Store({
     },
     async addMessage({ commit }, payload) {
       commit("ADD_MESSAGE", payload);
-    },
-    async setEndMessage({ commit }, payload) {
-      commit("SET_END_MESSAGE", payload);
     }
   },
   modules: {},

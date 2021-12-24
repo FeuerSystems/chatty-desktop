@@ -165,12 +165,6 @@
     align-items: center;
     flex-direction: row;
 }
-.right {
-    display: flex;
-    justify-content: center;
-    align-items: right;
-    flex-direction: row;
-}
 .adjust {
     margin-top: 15px;
 }
@@ -436,22 +430,3 @@ body {
   .sn {
     user-select: none;
   }
-  .circle {
-      border-radius: 50%;
-  }
-  .Vue-Toastification__container {
-    z-index: 9999;
-    position: fixed;
-    padding: 4px;
-    width: 600px;
-    box-sizing: border-box;
-    display: flex;
-    min-height: 90%;
-    color: #fff;
-    margin-top: 20px;
-    flex-direction: column;
-    pointer-events: none;
-}
-.Vue-Toastification__toast--default {
-    background-color: #1d1d1d !important;
-}

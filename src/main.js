@@ -13,6 +13,7 @@ import  VTooltip  from 'v-tooltip';
 import store from './store';
 import { NotificationService } from './buildpack/Notification/NotificationService';
 import Clipboard from 'v-clipboard';
+<<<<<<< HEAD
 import devtools from '@vue/devtools';
 import VueSmoothScroll from 'vue2-smooth-scroll';
 import VueResource from 'vue-resource';
@@ -21,6 +22,8 @@ import "vue-toastification/dist/index.css";
 import VueOffline from 'vue-offline'
 
 
+=======
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 // Set Decorations to false, we have our own icons :)
 appWindow.setDecorations(false);
 // Disable production tip
@@ -29,11 +32,11 @@ Vue.config.productionTip = false;
 Vue.prototype.FileManager = new FileManager();
 
 Vue.mixin(ChattyMixin);
-Vue.use(devtools);
 Vue.use(VueSweetalert2);
 Vue.use(MotionPlugin);
 Vue.use(VTooltip);
 Vue.use(Clipboard);
+<<<<<<< HEAD
 Vue.use(VueSmoothScroll);
 Vue.use(VueResource);
 Vue.use(Toast);
@@ -46,6 +49,8 @@ Vue.prototype.$changelog = [
   "Settings page was reworked",
   Vue.prototype.$version
 ]
+=======
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 // Error handle ALL components
 Vue.config.errorHandler = function (err, vm, info) {
   const log = (location, text, obj) => {

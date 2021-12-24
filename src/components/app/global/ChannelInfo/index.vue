@@ -111,11 +111,23 @@ export default {
 
 <style scoped>
 .innerbar {
+<<<<<<< HEAD
   padding: 5px;
   display: flex;
   align-items: center;
   width: 100%;
   padding: 7px;
+=======
+    background: rgb(34, 34, 34);
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    width: fit-content;
+    border: var(--confirm) 2px solid;
+    padding: 7px;
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 }
 .channel-icon {
   transition: all 250ms ease;

@@ -5,6 +5,7 @@
         <span class="current-settings-placeholder">Settings for </span>
         <span class="current-settings-user">{{ user.name }}</span>
       </h2>
+<<<<<<< HEAD
       <div class="settings-panel sn">
         <SettingsCard
           text=" <span class='dc'>App</span>"
@@ -16,15 +17,22 @@
           v-on:clicked="current = 'app'"
         />
         <SettingsCard
+=======
+       <div class="settings-panel sn">
+         <SettingsCard
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
           text=" <span class='cc'> You</span><br>"
           group="Self"
           :properties="[user.name, user.id]"
           :icon="user.avatar"
           :circle="true"
+<<<<<<< HEAD
           :style="`${current == 'self' ? 'border: var(--primary) 2px solid;' : ''}`"
           v-on:clicked="current = 'self'"
+=======
+          v-tooltip="'Coming soon...'"
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
         />
-
         <SettingsCard
           text=" <span class='pc'>Devices</span>"
           group="Settings"
@@ -37,10 +45,7 @@
         <SettingsCard
           text=" <span class='wc'>Friends & Communities</span>"
           group="Friends"
-          :properties="[
-            `<b class='cc'>${friends.length}</b> Friend${friends.length == 1 ? '' : 's'}`,
-            `<b class='cc'>0</b> Communities`,
-          ]"
+          :properties="[`<b class='cc'>${friends.length}</b> Friend${(friends.length == 1) ? '' : 's'}`,`<b class='cc'>0</b> Communities`]"
           :icon="require('@/assets/svg/icons/server.svg')"
           :circle="false"
           :style="`${current == 'friends' ? 'border: var(--primary) 2px solid;' : ''}`"
@@ -48,6 +53,7 @@
         />
       </div>
     </div>
+<<<<<<< HEAD
     <div class="settings-body f fr">
       <div class="user-settings right-pane" v-if="current == 'app'">
         <span class="sn">App Settings</span>
@@ -193,18 +199,24 @@
           <DeviceCard :device="devices.devices[0]" />
         </div>
       </div>
+=======
+    <div class="settings-body f fr"> 
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
     </div>
   </div>
 </template>
 
 <script>
 import SettingsCard from "../components/app/global/Settings/SettingsCard.vue";
+<<<<<<< HEAD
 import ChatMessage from "../components/app/global/Chat/ChatMessage.vue";
 import "vue-swatches/dist/vue-swatches.css";
 import DeviceCard from "../components/app/global/Settings/DeviceCard.vue";
 import BaseButton from "../components/base/BaseButton.vue";
 import { open } from "@tauri-apps/api/dialog";
 import { invoke } from "@tauri-apps/api/tauri";
+=======
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 export default {
   name: "settings",
   props: {
@@ -213,8 +225,9 @@ export default {
   computed: {
     friends() {
       return this.$store.state.friends;
-    },
+    }
   },
+<<<<<<< HEAD
   methods: {
     testData(e) {
       console.log(e);
@@ -274,20 +287,22 @@ export default {
     },
   },
   components: { SettingsCard, ChatMessage, DeviceCard, BaseButton },
+=======
+  components: { SettingsCard },
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
   async mounted() {
-    this.requireModules("rest");
-    let userMod = this.Chatty.Rest.getModule("user");
+    this.requireModules('rest');
+    let userMod = this.Chatty.Rest.getModule('user');
     let deviceReq = await userMod.getDevices(this.user.auth);
     let deviceJson = deviceReq.json;
     console.log(this.$store.state.friends);
-    this.devices.total = `<b class="cc">${deviceJson.devices.length}</b> Connected device${
-      deviceJson.devices.length == 1 ? "" : "s"
-    }`;
+    this.devices.total = `<b class="cc">${deviceJson.devices.length}</b> Connected device${(deviceJson.devices.length == 1) ? '' : 's'}`;
     this.devices.devices = deviceJson.devices;
   },
   data() {
     return {
       devices: {
+<<<<<<< HEAD
         total: "Loading...",
         devices: [],
       },
@@ -301,15 +316,20 @@ export default {
       currentSoundState: 'Test'
     };
   },
+=======
+        total: 'Loading...',
+        devices: []
+      }
+    }
+  }
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 };
 </script>
 
-<style>
+<style scoped>
 .settings-page {
   height: 100vh;
   color: var(--gray);
-  flex-shrink: 0;
-  padding: 5px;
 }
 .current-settings-header {
   font-size: 5px !important;
@@ -318,6 +338,7 @@ export default {
   font-weight: normal;
 }
 .settings-panel {
+<<<<<<< HEAD
   width: 400px;
 }
 .right-pane {
@@ -469,5 +490,8 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 input[type="color"]::-webkit-color-swatch {
   border: none;
+=======
+    width: 400px;
+>>>>>>> parent of 6206ad8 (Add a bit more of everything including upload progress for Avatar (GIFS))
 }
 </style>
