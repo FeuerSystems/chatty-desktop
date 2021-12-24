@@ -12,6 +12,8 @@
           :properties="[]"
           :icon="require('@/assets/svg/icons/server.svg')"
           :circle="false"
+          :style="`${current == 'app' ? 'border: var(--primary) 2px solid;' : ''}`"
+          v-on:clicked="current = 'app'"
         />
         <SettingsCard
           text=" <span class='cc'> You</span><br>"
@@ -19,7 +21,8 @@
           :properties="[user.name, user.id]"
           :icon="user.avatar"
           :circle="true"
-          :style="`${current == 0 ? 'border: var(--primary) 2px solid;' : ''}`"
+          :style="`${current == 'self' ? 'border: var(--primary) 2px solid;' : ''}`"
+          v-on:clicked="current = 'self'"
         />
 
         <SettingsCard
@@ -28,6 +31,8 @@
           :properties="[devices.total]"
           :icon="require('@/assets/svg/icons/devices.svg')"
           :circle="false"
+          :style="`${current == 'devices' ? 'border: var(--primary) 2px solid;' : ''}`"
+          v-on:clicked="current = 'devices'"
         />
         <SettingsCard
           text=" <span class='wc'>Friends & Communities</span>"
@@ -38,74 +43,130 @@
           ]"
           :icon="require('@/assets/svg/icons/server.svg')"
           :circle="false"
+          :style="`${current == 'friends' ? 'border: var(--primary) 2px solid;' : ''}`"
+          v-on:clicked="current = 'friends'"
         />
       </div>
     </div>
     <div class="settings-body f fr">
-      <div class="user-settings right-pane" v-if="true">
+      <div class="user-settings right-pane" v-if="current == 'app'">
         <span class="sn">App Settings</span>
         <div class="versioning right">
           <span class="right sn dc">{{ $version }}</span>
         </div>
         <div class="main-app-body center f fc">
-          <span class="large b">Styles</span>
-          <div class="styles-editor">
-            <span class="center medium">Chat</span>
-            <div class="style-options f fr">
-              <div class="message-wrapper style-option" @click="(e) => selectedChatStyle = {name: 'Chat Message', e: e.srcElement}">
-                <b class="center">Message</b>
-                <ChatMessage
-                  :user="{ id: '0', name: 'Example User' }"
-                  :text="'Example Content'"
-                  :id="'12882'"
-                  :sender="true"
-                  :randomvalue="6"
-                  :margins="'0'"
-                  :created="{ milli: 0 }"
-                  :continuation="false"
-                  class="sn"
+          <div class="notifications">
+            <span class="large b center">Notifications</span>
+            <div class="notifications-action center">
+              <BaseButton
+                :text="currentSoundState"
+                height="55px"
+                type="confirm"
+                :icon="require('@/assets/svg/icons/play.svg')"
+                v-on:clicked="testNotification"
+                :disabled="currentSoundState == 'Playing...'"
+              />
+            </div>
+            <div class="notification-editor flex-grid-l">
+              <div class="notification-sound-editor center fc">
+                <span class="center medium">Sound</span>
+                <span :class="'current-sound ' + uploadedSound.color">{{
+                  uploadedSound.name
+                }}</span>
+                <BaseButton
+                  text="Upload Sound"
+                  :icon="require('@/assets/svg/icons/sound.svg')"
+                  v-on:clicked="uploadSound"
+                  height="45px"
+                />
+                <BaseButton
+                  text="Silence"
+                  :icon="require('@/assets/svg/icons/mute.svg')"
+                  type="danger"
+                  height="45px"
                 />
               </div>
-              <div class="message-wrapper style-option f fc" @click="(e) => selectedChatStyle = {name: 'Message Input', e: e.srcElement}">
-                <b class="center">Input</b>
-                <span
+              <div class="notification-sound-editor center fc" v-if="false">
+                <span class="center medium center fc">Response</span>
+                <input
                   type="text"
-                  placeholder="Message @Example User"
-                  class="forminput name sn"
-                  id="app-name"
-                  contenteditable="true"
-                  >Example Message</span
-                >
+                  placeholder="Use $user to show the user's name and $content to show the content of the message"
+                />
               </div>
-              <div class="message-wrapper style-option" @click="(e) => selectedChatStyle = {name: 'Channel Header', e: e.srcElement}">
-                <b>Channel Info</b>
-                <div class="channelbar sn">
-                  <div class="innerbar fr" :id="`channel-`">
-                    <img
-                      :src="require('@/assets/svg/icons/missing.svg')"
-                      width="45"
-                      height="45"
-                      class="channel-icon rounded"
-                    />
-                    <span class="channel-data"
-                      ><span class="channel-name">Example User</span>
-                      <span class="channel-id"> (0230290391)</span></span
-                    >
+            </div>
+          </div>
+          <div class="styles" v-if="false">
+            <span class="large b">Styles</span>
+            <div class="styles-editor">
+              <span class="center medium">Chat</span>
+              <div class="style-options f fr flex-grid-l">
+                <div
+                  class="message-wrapper style-option"
+                  @click="(e) => (selectedChatStyle = { name: 'Chat Message', e: e.srcElement })"
+                >
+                  <b class="center">Message</b>
+                  <ChatMessage
+                    :user="{ id: '0', name: 'Example User' }"
+                    :text="'Example Content'"
+                    :id="'12882'"
+                    :sender="true"
+                    :randomvalue="6"
+                    :margins="'0'"
+                    :created="{ milli: 0 }"
+                    :continuation="false"
+                    class="sn"
+                  />
+                </div>
+                <div
+                  class="message-wrapper style-option f fc"
+                  @click="(e) => (selectedChatStyle = { name: 'Message Input', e: e.srcElement })"
+                >
+                  <b class="center">Input</b>
+                  <span
+                    type="text"
+                    placeholder="Message @Example User"
+                    class="forminput name sn"
+                    id="app-name"
+                    contenteditable="true"
+                    >Example Message</span
+                  >
+                </div>
+                <div
+                  class="message-wrapper style-option"
+                  @click="(e) => (selectedChatStyle = { name: 'Channel Header', e: e.srcElement })"
+                >
+                  <b>Channel Info</b>
+                  <div class="channelbar sn">
+                    <div class="innerbar fr" :id="`channel-`">
+                      <img
+                        :src="require('@/assets/svg/icons/missing.svg')"
+                        width="45"
+                        height="45"
+                        class="channel-icon rounded"
+                      />
+                      <span class="channel-data"
+                        ><span class="channel-name">Example User</span>
+                        <span class="channel-id"> (0230290391)</span></span
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="color-picker center f fc">
-              <b>{{(selectedChatStyle != null) ? `${selectedChatStyle.name}` : 'Select A Box'}}</b>
-              <div class="color-pall" style="opacity: 0.5;">
-              
-                <input type="color" name="color-pick" :disabled="(selectedChatStyle != null) ? false : true"/>
+              <b>{{ selectedChatStyle != null ? `${selectedChatStyle.name}` : "Select A Box" }}</b>
+              <div class="color-pall" style="opacity: 0.5">
+                <input
+                  type="color"
+                  name="color-pick"
+                  :disabled="selectedChatStyle != null ? false : true"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="user-settings right-pane" v-if="false">
+      <div class="user-settings right-pane" v-if="current == 'self' ? true : false">
         <span>Settings</span>
         <div class="self-profile">
           <span class="center profile-tag">Your Profile</span>
@@ -126,6 +187,12 @@
           </div>
         </div>
       </div>
+      <div class="device-settings right-pane" v-if="current == 'devices'">
+        <span>Devices</span>
+        <div class="cards">
+          <DeviceCard :device="devices.devices[0]" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -134,6 +201,10 @@
 import SettingsCard from "../components/app/global/Settings/SettingsCard.vue";
 import ChatMessage from "../components/app/global/Chat/ChatMessage.vue";
 import "vue-swatches/dist/vue-swatches.css";
+import DeviceCard from "../components/app/global/Settings/DeviceCard.vue";
+import BaseButton from "../components/base/BaseButton.vue";
+import { open } from "@tauri-apps/api/dialog";
+import { invoke } from "@tauri-apps/api/tauri";
 export default {
   name: "settings",
   props: {
@@ -144,7 +215,65 @@ export default {
       return this.$store.state.friends;
     },
   },
-  components: { SettingsCard, ChatMessage },
+  methods: {
+    testData(e) {
+      console.log(e);
+    },
+    async uploadSound() {
+      let path = await open({
+        filters: [
+          {
+            name: "Sounds",
+            extensions: ["mp3", "flac", "wav", "m4a"],
+          },
+        ],
+      });
+      let name = this.getFileFromPath(path);
+      this.uploadedSound = {
+        name: name,
+        color: "cc",
+        path: path,
+      };
+    },
+    async testNotification() {
+      this.Chatty.Notifier.sendToast({
+        op: 2,
+        type: "notify",
+        d: {
+          texts: [`Example Header`, "Example Message", "Second line"],
+          textboxes: [
+            {
+              title: "Reply Message",
+              placeholder: `Write to @Example User`,
+              input: "reply",
+              id: "textBox",
+            },
+          ],
+          buttons: [
+            {
+              Content: "Reply",
+              HintID: 'textBox',
+              Arguments: 'reply_button',
+              Icon: 'C:\\Users\\bryso\\Downloads\\reply.png'
+            },
+            {
+              Content: "Ignore",
+            },
+          ]
+        },
+      });
+      this.currentSoundState = "Playing...";
+      try {
+        let sound = await invoke("play_sound", { path: this.uploadedSound.path });
+        this.currentSoundState = "Test";
+      } catch (err) {
+        this.currentSoundState = "Test";
+      }
+      
+
+    },
+  },
+  components: { SettingsCard, ChatMessage, DeviceCard, BaseButton },
   async mounted() {
     this.requireModules("rest");
     let userMod = this.Chatty.Rest.getModule("user");
@@ -158,12 +287,18 @@ export default {
   },
   data() {
     return {
-      current: 0,
       devices: {
         total: "Loading...",
         devices: [],
       },
       selectedChatStyle: null,
+      current: "app",
+      uploadedSound: {
+        color: "dc",
+        name: "No sound selected",
+        path: String,
+      },
+      currentSoundState: 'Test'
     };
   },
 };
@@ -247,7 +382,8 @@ export default {
 .medium {
   font-size: 22px;
 }
-.style-options {
+
+.flex-grid-l {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -284,7 +420,7 @@ export default {
 }
 .style-option:hover {
   background-color: rgb(24, 24, 24);
-   border: var(--primary) 2px solid;
+  border: var(--primary) 2px solid;
 }
 
 .innerbar {
@@ -313,25 +449,25 @@ export default {
   color: #fff;
 }
 .vue-swatches__wrapper {
-    background-color: inherit;
-    box-sizing: content-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+  background-color: inherit;
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 input[type="color"] {
-	-webkit-appearance: none;
-	border: none;
-	width: 128px;
-	height: 45px;
+  -webkit-appearance: none;
+  border: none;
+  width: 128px;
+  height: 45px;
   padding: 0px;
   background-color: #533333;
 }
 input[type="color"]::-webkit-color-swatch-wrapper {
-	padding: 0;
+  padding: 0;
 }
 input[type="color"]::-webkit-color-swatch {
-	border: none;
+  border: none;
 }
 </style>

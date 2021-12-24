@@ -1,5 +1,5 @@
 <template>
-    <div class="settings-card feature-comp adjust" :group="group">
+    <div class="settings-card feature-comp adjust" :group="group" @click="clicked">
         <img height="32px" width="fit-content" :src="icon" :id="group + '-img'" ref="group-img" :class="`settings-card-img ${circle ? 'circle' : ''}`" @click="(e) => {(circle) ? copyAvatar(e) : null}" :copy="circle"/>
         <span class="settings-card-name" v-html="text"/>
         <div class="statements">
@@ -17,14 +17,16 @@ export default {
         icon: String,
         circle: Boolean,
         group: String,
-        properties: Array
+        properties: Array,
     },
     methods: {
         copyAvatar(e) {
             let el = e.srcElement;
             console.log(el);
             this.$clipboard(el.src);
-
+        },
+        clicked(e) {
+            this.$emit('clicked', e);
         }
     }
 }

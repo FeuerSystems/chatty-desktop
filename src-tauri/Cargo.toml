@@ -1,23 +1,25 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = [ "you" ]
-license = ""
-repository = ""
-default-run = "app"
-edition = "2018"
+authors = ["you"]
 build = "src/build.rs"
+default-run = "app"
+description = "A Tauri App"
+edition = "2018"
+license = ""
+name = "app"
+repository = ""
+version = "0.1.0"
 
 [build-dependencies]
-tauri-build = { version = "1.0.0-beta.4" }
+tauri-build = {version = "1.0.0-beta.4"}
 
 [dependencies]
+serde = {version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-serde = { version = "1.0", features = [ "derive" ] }
-tauri = { git = "https://github.com/tauri-apps/tauri", branch = "next", features = ["api-all"], version = "1.0.0-beta.8" }
-winapi = { version = "0.3.9", features = [ "shellscalingapi" ] }
+soloud = {git = "https://github.com/moalyousef/soloud-rs"}
+tauri = {git = "https://github.com/tauri-apps/tauri", branch = "next", features = ["api-all"], version = "1.0.0-beta.8"}
+winapi = {version = "0.3.9", features = ["shellscalingapi"] }
+cpal = { version = "*" }
 
 [features]
-default = [ "custom-protocol" ]
-custom-protocol = [ "tauri/custom-protocol" ]
+custom-protocol = ["tauri/custom-protocol"]
+default = ["custom-protocol"]

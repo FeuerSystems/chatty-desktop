@@ -7,9 +7,9 @@ export default {
     invertColor(hex) {
       function padZero(str, len) {
         len = len || 2;
-        var zeros = new Array(len).join('0');
+        var zeros = new Array(len).join("0");
         return (zeros + str).slice(-len);
-    }
+      }
       if (hex.indexOf("#") === 0) {
         hex = hex.slice(1);
       }
@@ -71,7 +71,7 @@ export default {
           //       "SmartModules",
           //       `Chatty Socket is required on this page (${location.href}) but wasn't found.. Loading it now`
           //     );
-             
+
           //     // console.log(this.Chatty.ws);
           //     // const socket = await this.Chatty.ws;
           //     // socket.addDecoder(new Decoder(socket.encoding));
@@ -99,6 +99,7 @@ export default {
                   size: 500,
                 },
                 auth: this.$store.state.self.auth,
+                toast: this.$toast
               });
               this.log("SmartModules", "REST client is loaded", this.Chatty.Rest);
             } else if (this.Chatty.Rest) {
@@ -127,7 +128,10 @@ export default {
       }
     },
     getTimestamp(time) {
-      return moment(time).format('h:mm a');
-  },
+      return moment(time).format("h:mm a");
+    },
+    getFileFromPath(path) {
+      return path.replace(/^.*[\\\/]/, "");
+    },
   },
 };

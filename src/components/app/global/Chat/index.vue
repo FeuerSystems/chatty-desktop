@@ -21,7 +21,6 @@
         :created="message.created"
         :continuation="verifyContinuation(messages, message)"
       />
-     
     </div>
   </transition>
 </template>

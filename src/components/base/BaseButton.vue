@@ -6,13 +6,13 @@
         <div class="baseButtonLabel" :style="`line-height: ${ (height && height.includes('px')) ? parseInt(height.replace('px'))-2 + '' : 'auto'};`">{{text}}</div>
         </div></div></button>
 
-        <button v-if="!icon && disabled" :class="`baseButton ua`" :style="`height: ${height}; width: ${width}; background-color: var(--${type}-clicked); cursor: not-allowed;`" v-tooltip="'Coming Soon...'">
+        <button v-if="!icon && disabled" :class="`baseButton ua`" :style="`height: ${height}; width: ${width}; background-color: var(--${type}-clicked); cursor: not-allowed;`">
           <div class="baseButtonContents">
         <div class="baseButtonContent">
         <div class="baseButtonLabel" :style="`line-height: ${ (height && height.includes('px')) ? parseInt(height.replace('px'))-2 + '' : 'auto'};`">{{text}}</div>
         </div></div></button>
 
-      <button v-if="icon && !disabled" :class="`baseButton ${type} bb`" @click="ex" :style="`height: ${height}; width: ${width}; background-color: ${(active) ? `${type}` : '#36393F; opacity: 0.8;'}`">
+      <button v-if="icon && !disabled && text" :class="`baseButton ${type} bb`" @click="ex" :style="`height: ${height}; width: ${width}; background-color: ${(active) ? `${type}` : '#36393F; opacity: 0.8;'}`">
 
         <div class="baseButtonContents">
         <div class="baseButtonContent">
@@ -22,12 +22,20 @@
         </div>
       </button>
 
-       <button v-if="icon && disabled" :class="`baseButton ua`" :style="`height: ${height}; width: ${width}; background-color: var(--${type}-clicked); cursor: not-allowed;`" v-tooltip="'Coming Soon...'" :alt="`${type} icon ${icon.replace('~/assets/svg/placeholders')}`">
+       <button v-if="icon && disabled" :class="`baseButton ua`" :style="`height: ${height}; width: ${width}; background-color: var(--${type}-clicked); cursor: not-allowed;`" :alt="`${type} icon ${icon.replace('~/assets/svg/placeholders')}`">
 
         <div class="baseButtonContents">
         <div class="baseButtonContent">
         <img :src="icon" :height="(height && height.includes('px')) ? parseInt(height.replace('px'))-10 + '' : 'auto'" :width="(height && height.includes('px')) ? parseInt(height.replace('px'))-10 + '' : 'auto'" class="baseButtonIcon" :alt="`${type} icon ${icon.replace('~/assets/svg/placeholders')}`"/>
         <div class="baseButtonLabel sb" :style="`line-height: ${ (height && height.includes('px')) ? parseInt(height.replace('px'))-2 + 'px' : 'auto'};`">{{text}}</div>
+        </div>
+        </div>
+      </button>
+      <button v-if="icon && !text && !disabled"  :class="`baseButton ${type} bb`" @click="ex" :style="`height: ${height}; width: ${width}; background-color: ${(active) ? `${type}` : '#36393F; opacity: 0.8;'}`">
+
+        <div class="baseButtonContents">
+        <div class="baseButtonContent">
+        <img :src="icon" style="margin-left: auto; margin-right: auto;" :height="(height && height.includes('px')) ? parseInt(height.replace('px'))-10 + '' : 'auto'" :width="(height && height.includes('px')) ? parseInt(height.replace('px'))-10 + '' : 'auto'" class="baseButtonIcon" :alt="`${type} icon ${icon.replace('~/assets/svg/placeholders')}`"/>
         </div>
         </div>
       </button>

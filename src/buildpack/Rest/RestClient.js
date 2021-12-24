@@ -16,6 +16,7 @@ export default class RestClient {
     this.auth = config.auth;
     this.cacheManager = new CacheManager(this.cache.size);
     this.modules = new Map();
+    this.$toast = config.toast;
   }
 
   async restFetch(url, type, data) {
@@ -45,6 +46,7 @@ export default class RestClient {
       };
     }).catch((err) => {
       console.warn(`[REST] - Request ${url} FAILED.`, err);
+      this.$toast.error(`Fetching ${url} FAILED`, err.message);
       return {
         ok: false,
         json: null,

@@ -51,6 +51,9 @@ export class NotificationService {
                             console.log(`[Notifier -> Input]:`, json.d);
                             break;
                         }
+                        case "activated": {
+                            this.events.emit("activated", json.d);
+                        }
                     }
                     break;
                 }

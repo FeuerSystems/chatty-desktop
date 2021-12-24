@@ -27,6 +27,8 @@ module.exports = {
      * 0: Message (A message was recieved)
      * 1: Presence Update (A friend, or member set a new presence (Text or IMG))
      * 2: Profile Update (A friend, or member set a new profile avatar, about me OR name)
+     * 3: Self Message
+     * 4: CALL REQ
     */
   Recieve_Event: {
     Message: 0,

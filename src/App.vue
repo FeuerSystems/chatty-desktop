@@ -29,7 +29,9 @@ import { listen } from "@tauri-apps/api/event";
 export default {
   name: "client",
   mounted() {
-
+    this.$on("offline", () => {
+      alert("You are offline! The website will not work");
+    });
   },
   methods: {
     minimize() {
@@ -83,7 +85,7 @@ export default {
   position: absolute;
   display: inline-block;
   font-weight: bold;
-  color: white;
+  color: gray;
   overflow: hidden;
   user-select: none;
   padding: 8px;
@@ -91,7 +93,6 @@ export default {
   z-index: 2;
   font-smooth: always;
   z-index: 10;
-  
 }
 
 #titlebar-close:hover {
